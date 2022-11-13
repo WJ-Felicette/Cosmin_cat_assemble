@@ -6,6 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Stanby.unity
+    guid: 74fec0fbb351842e7af106f4fd05b460
+  - enabled: 1
     path: Assets/Scenes/MainGame.unity
     guid: 3aee25f6ffdb21b4ea69e8aac1aa9586
+  - enabled: 1
+    path: Assets/Scenes/MiniGame.unity
+    guid: 387f399957df1496481a320d14ff5774
+  - enabled: 1
+    path: Assets/Scenes/CatHouseScene.unity
+    guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/CatShopScene.unity
+    guid: 5abb27554234a984bbb8b36227879e39
   m_configObjects: {}

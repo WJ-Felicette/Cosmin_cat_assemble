@@ -36,6 +36,8 @@ public class MainGameUIController : MonoBehaviour
     }
     public void OnClickHappy()
     {
+        Time.timeScale = 1;
+        DOTween.KillAll();
         UnityEngine.SceneManagement.SceneManager.LoadScene("Stanby");
     }
 }

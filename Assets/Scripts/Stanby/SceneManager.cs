@@ -8,13 +8,13 @@ public class SceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void GoMg()
@@ -25,7 +25,5 @@ public class SceneManager : MonoBehaviour
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("MiniGame");
     }
-    public void ToMainGame(int _id){
-        UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
-    }
 }
+    

@@ -134,7 +134,7 @@ public class BossController : MonoBehaviour
     }
     public void Damaged(int _prizeValue)
     {
-        this.hp--;
+        this.hp = this.hp - 1 > 0 ? this.hp - 1 : 0;
         QuizTXT.text = "";
         this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15).SetDelay(0.3f).OnComplete(() =>
         {
@@ -142,8 +142,10 @@ public class BossController : MonoBehaviour
         });
         aimImg.GetComponentInChildren<Image>().DOFade(0, 0.5f).SetDelay(0.3f);
         DOTween.To(() => aimBoardImg.fillAmount, x => aimBoardImg.fillAmount = x, 0, 0.2f).SetDelay(0.3f);
-        DOTween.To(() => hpBar.fillAmount, x => hpBar.fillAmount = x, (1.0f * this.hp) / this.maxHp, 0.4f).SetDelay(0.4f);
-        hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * (this.hp * 100 / this.maxHp));
+        DOTween.To(() => hpBar.fillAmount, x => hpBar.fillAmount = x, (1.0f * this.hp) / this.maxHp, 0.4f).SetDelay(0.4f).OnComplete(() =>
+        {
+            hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * (this.hp * 100 / this.maxHp));
+        });
     }
     public void WrongAns()
     {

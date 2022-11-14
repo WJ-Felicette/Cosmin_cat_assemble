@@ -6,6 +6,7 @@ using MoreMountains.Feedbacks;
 using TMPro;
 using Cinemachine;
 using UnityEngine.Pool;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -76,85 +77,91 @@ public class PlayerController : MonoBehaviour
         //?���? 조작 ?��?��?�� ?��?�� if?��
         if (Input.GetMouseButtonDown(0) && GameDirector.mod != 3)
         {
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                this.dMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            }
             //Debug.Log("Clicked!!!");
-            this.dMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         }
         if (Input.GetMouseButtonUp(0) && GameDirector.mod != 3)
         {
-            this.uMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            this.deltaMousePos = this.uMousePos - this.dMousePos;
-
-            if (this.deltaMousePos.magnitude < 1.0f)
+            if (!EventSystem.current.IsPointerOverGameObject())
             {
-                if (this.GameDirector.mod != 2 || this.state == 0)
-                {
-                    this.lastIdx = this.idx;
-                    if (this.uMousePos.x > 0 && this.idx < 4)
-                    {
-                        this.idx++;
-                    }
-                    else if (this.uMousePos.x < 0 && this.idx > 0)
-                    {
-                        this.idx--;
-                    }
-                    this.destination = new Vector3((this.idx - 2) * 0.9f, -4, 0);
+                this.uMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                this.deltaMousePos = this.uMousePos - this.dMousePos;
 
-                    if (hitData.collider != null && this.idx != this.lastIdx)
-                    {
-                        if ((this.idx - this.lastIdx == 1 && hitDataRight.collider == null)
-                        || (this.idx - this.lastIdx == -1 && hitDataLeft.collider == null))
-                        {
-                            this.Swingby();
-                        }
-                    }
-                }
-                //Debug.Log(this.uMousePos.x);
-                //Debug.Log(this.destination);
-            }
-            //�??��?�� ?��?�� ?��?��?��?�� else if
-            else if (this.deltaMousePos.magnitude > 1.5f && this.deltaMousePos.y > 0 && this.state != 2 && this.state != 4)
-            {
-                if (this.BoosterGauge.boostLevel > 0 || this.GameDirector.mod == 2)
+                if (this.deltaMousePos.magnitude < 1.0f)
                 {
-                    if (this.BoosterGauge.boostLevel == 3)
-                    {
-                        this.BoosterGauge.currentValue = 0.0f;
-                    }
                     if (this.GameDirector.mod != 2 || this.state == 0)
                     {
-                        this.boostTimer = 0.0f;
-                        this.boostDuration += this.boostPlus;
-                        this.state = 1;
-                        this.boostLevel++;
-                        this.BoosterGauge.boostLevel -= 1;
+                        this.lastIdx = this.idx;
+                        if (this.uMousePos.x > 0 && this.idx < 4)
+                        {
+                            this.idx++;
+                        }
+                        else if (this.uMousePos.x < 0 && this.idx > 0)
+                        {
+                            this.idx--;
+                        }
+                        this.destination = new Vector3((this.idx - 2) * 0.9f, -4, 0);
 
-                        DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.speed * 2.0f, 0.3f)
-                            .SetEase(Ease.OutCirc)
-                            .OnComplete(() =>
+                        if (hitData.collider != null && this.idx != this.lastIdx)
+                        {
+                            if ((this.idx - this.lastIdx == 1 && hitDataRight.collider == null)
+                            || (this.idx - this.lastIdx == -1 && hitDataLeft.collider == null))
                             {
-                                if (this.GameDirector.mod == 2 && this.QuizDirector.state == 2)
-                                {
-                                    this.QuizDirector.Selected(this.idx);
-                                }
-                            });
-
-                        DOTween.To(() => this.vcam.m_Lens.OrthographicSize, s => this.vcam.m_Lens.OrthographicSize = s, 5.1f, 0.4f)
-                            .SetEase(Ease.OutCirc);
-                        this.transform.DOMoveY(-3.0f + 0.3f * (this.boostLevel - 1), 0.3f)
-                            .SetEase(Ease.OutCirc);
-
-                        BoostVFXController.SetState(this.boostLevel, this.GameDirector.mod);
-
-
+                                this.Swingby();
+                            }
+                        }
                     }
+                    this.transform.DOMoveX(this.destination.x, 0.025f); //x?��?��?�� ?��?���? ?��?��
+                                                                        //Debug.Log(this.uMousePos.x);
+                                                                        //Debug.Log(this.destination);
                 }
-                // if (hitData.collider != null)
-                // {
-                //     this.BoosterGauge.currentValue += 20;
-                // }
+                //�??��?�� ?��?�� ?��?��?��?�� else if
+                else if (this.deltaMousePos.magnitude > 1.5f && this.deltaMousePos.y > 0 && this.state != 2 && this.state != 4)
+                {
+                    if (this.BoosterGauge.boostLevel > 0 || this.GameDirector.mod == 2)
+                    {
+                        if (this.BoosterGauge.boostLevel == 3)
+                        {
+                            this.BoosterGauge.currentValue = 0.0f;
+                        }
+                        if (this.GameDirector.mod != 2 || this.state == 0)
+                        {
+                            this.boostTimer = 0.0f;
+                            this.boostDuration += this.boostPlus;
+                            this.state = 1;
+                            this.boostLevel++;
+                            this.BoosterGauge.boostLevel -= 1;
+
+                            DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.speed * 2.0f, 0.3f)
+                                .SetEase(Ease.OutCirc)
+                                .OnComplete(() =>
+                                {
+                                    if (this.GameDirector.mod == 2 && this.QuizDirector.state == 2)
+                                    {
+                                        this.QuizDirector.Selected(this.idx);
+                                    }
+                                });
+
+                            DOTween.To(() => this.vcam.m_Lens.OrthographicSize, s => this.vcam.m_Lens.OrthographicSize = s, 5.1f, 0.4f)
+                                .SetEase(Ease.OutCirc);
+                            this.transform.DOMoveY(-3.0f + 0.3f * (this.boostLevel - 1), 0.3f)
+                                .SetEase(Ease.OutCirc);
+
+                            BoostVFXController.SetState(this.boostLevel, this.GameDirector.mod);
+
+
+                        }
+                    }
+                    // if (hitData.collider != null)
+                    // {
+                    //     this.BoosterGauge.currentValue += 20;
+                    // }
+                }
             }
         }
-        this.transform.DOMoveX(this.destination.x, 0.025f); //x?��?��?�� ?��?���? ?��?��
 
         //�??��?�� 중인 고양?���? ?��???�? ?��?��?��?���? ?��?�� �?�?
         if (this.state == 1)

@@ -111,8 +111,8 @@ public class WJ_Sample : MonoBehaviour
     // 보기 선택
     public void Select_Ansr(int _nIndex)
     {
-        //Debug.Log("SELECTED");
-        this.ReflectResult(_nIndex); //민석 추가
+        Debug.Log("SELECTED");
+        //this.ReflectResult(_nIndex); //민석 추가
         switch (eState)
         {
             case STATE.DN_SET:
@@ -236,7 +236,6 @@ public class WJ_Sample : MonoBehaviour
     {
         char[] SEP = { ',' };
         string[] tmWrAnswer;
-
         //TEXDraw.text = scWJ_Conn.GetLatexCode(_qstCn); // 문제 출력
         string _str = scWJ_Conn.GetLatexCode(_qstCn);
         //Debug.Log("str: " + _str);
@@ -275,11 +274,13 @@ public class WJ_Sample : MonoBehaviour
 
 
         // 보기 리스트에 정답을 넣음.
-        int nAnsridx = UnityEngine.Random.Range(0, nAnsrCount);        // 정답 인덱스! 랜덤으로 배치
+        int nAnsridx = UnityEngine.Random.Range(0, nAnsrCount); // 정답 인덱스! 랜덤으로 배치
         for (int i = 0, q = 0; i < nAnsrCount; ++i, ++q)
         {
             if (i == nAnsridx)
             {
+                Debug.Log("Set AnsIDX: " + i);
+                QuizDirector.answerId = i;
                 btAnsr[i].gameObject.GetComponent<ChoiceController>().nextText = strAnswer;
                 //txAnsr[i].text = strAnswer;
                 --q;

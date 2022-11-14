@@ -12,7 +12,7 @@ public class QuizDirector : MonoBehaviour
     [SerializeField] WJ_Sample WJ_Sample;
     public int state = 0; //0:sleep, 1:init, 2:playing, 3:Setting
     public int round;
-    public int answerId = 5;
+    public int answerId = 6;
     int quizCounter = 8;
     [SerializeField] ChoiceController[] choiceControllerBundle = new ChoiceController[5];
     [SerializeField] GameObject BossWarning;
@@ -31,6 +31,7 @@ public class QuizDirector : MonoBehaviour
         this.GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         this.PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
         this.TalkDirector = GameObject.Find("TalkDirector").GetComponent<TalkDirector>();
+
     }
     public void Init()
     {
@@ -81,7 +82,6 @@ public class QuizDirector : MonoBehaviour
                         StartCoroutine(this.EndQuizMod());
                     }
                 }
-                this.answerId = 5;
             }
         }
     }
@@ -98,8 +98,7 @@ public class QuizDirector : MonoBehaviour
         this.quizCounter++;
 
         this.state = 3;
-        //Debug.Log("Selected Round: " + this.round);
-        WJ_Sample.Select_Ansr(_id);
+        Debug.Log("Selecting : " + _id + "// ans: " + this.answerId);
         this.choiceControllerBundle[_id].Selected(this.answerId, this.BossController.gameObject.transform.position);
         if (_id == this.answerId)
         {
@@ -110,6 +109,8 @@ public class QuizDirector : MonoBehaviour
         {
             this.BossController.WrongAns();
         }
+
+        WJ_Sample.Select_Ansr(_id);
 
         if (this.round > 0)
         {
@@ -127,7 +128,6 @@ public class QuizDirector : MonoBehaviour
             }
         }
         this.quizTimer = 0;
-        this.answerId = 5;
     }
 
     IEnumerator NextQuiz()

@@ -20,13 +20,12 @@ public class BGScroller : MonoBehaviour
     private void Update()
     {
         // Background move to moveDirection, speed = moveSpeed;
-        transform.position += Vector3.up * this.GameDirector.speed * this.speedWeight * Time.deltaTime;
-
+        transform.localPosition += Vector3.up * this.GameDirector.speed * this.speedWeight * Time.deltaTime;
 
         // 배경이 설정된 범위를 벗어나면 위치 재설정
-        if (transform.position.y <= -41.45f)
+        if (transform.localPosition.y <= -41.45f)
         {
-            transform.position = target.position + Vector3.up * 72.85f;
+            transform.localPosition = target.localPosition + Vector3.up * 72.85f;
         }
     }
     public void SetLevel(int _level)

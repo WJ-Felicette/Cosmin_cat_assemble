@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
     int lastIdx; //고양?���? 직전?�� ?��?�� ?���?
     float boostTimer; //?��?�� �??��?�� �??�� ?��간을 기록
     float boostDuration; //�??��?���? ?��?�� ?��간을 ????��
+    float boostPlus;
+    float[] boostPlusArr = { 0.3f, 0.4f, 0.5f, 0.6f };
     public int boostLevel = 0; //?��?��?���? �? �? �??��?���? ?��?��?��?���? ????��
     Vector3 destination; //고양?���? ?��?��?�� ?��치�?? ????��
     Vector3 dMousePos = Vector3.zero; //~mousePos?�� 모두 ?���? 조작?�� ?��?��?��?�� 것들
@@ -58,6 +60,8 @@ public class PlayerController : MonoBehaviour
         this.lastIdx = this.idx;
         this.destination = new Vector3(0, -4, 0);
         this.SpriteRenderer.sprite = catImgArr[GameDirector.catID]; //DB need, PlayerPrefs.getInt("catID")
+        this.boostPlus = this.boostPlusArr[PlayerPrefs.GetInt("currentWheelLv", 0)];
+        //this.boostPlus = this.boostPlusArr[3];
     }
     void Update()
     {
@@ -119,7 +123,7 @@ public class PlayerController : MonoBehaviour
                     if (this.GameDirector.mod != 2 || this.state == 0)
                     {
                         this.boostTimer = 0.0f;
-                        this.boostDuration += 0.4f;
+                        this.boostDuration += this.boostPlus;
                         this.state = 1;
                         this.boostLevel++;
                         this.BoosterGauge.boostLevel -= 1;

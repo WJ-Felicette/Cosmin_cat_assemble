@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using TexDrawLib;
+using TMPro;
 using MoreMountains.Feedbacks;
 using UnityEngine.UI;
 
@@ -18,13 +19,16 @@ public class BossController : MonoBehaviour
 
     [SerializeField] Sprite[] BossImg;
     [SerializeField] Image hpBar;
+    [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] GameObject scoreBar;
     [SerializeField] GameObject aimGo;
-    [SerializeField] Image aimImg;
     [SerializeField] GameObject PrizeBundle;
+    [SerializeField] Sprite[] aimImgArr;
+    [SerializeField] Image aimImg;
+    [SerializeField] Sprite[] aimBoardImgArr;
     [SerializeField] Image aimBoardImg;
-    //int[,] hpArr = { { 16, 12, 8 }, { 20, 16, 14 }, { 24, 20, 12 } };
-    int[,] hpArr = { { 4, 12, 8 }, { 4, 16, 14 }, { 4, 20, 12 } }; //test¿ë hp
+    //int[,] hpArr = { { 20, 16, 12, 8 }, { 24, 20, 16, 14 }, { 28, 24, 20, 16 } };
+    int[,] hpArr = { { 4, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 } }; //test hp
     int maxHp;
     public int hp;
     bool isFirstTime = true;
@@ -36,6 +40,8 @@ public class BossController : MonoBehaviour
         this.ObjectDirector = GameObject.Find("ObjectDirector").GetComponent<ObjectDirector>();
         this.SpriteRenderer = GetComponentInChildren<SpriteRenderer>();
         this.gameObject.SetActive(false);
+        aimImg.sprite = aimImgArr[PlayerPrefs.GetInt("currentScratcherLv", 0)];
+        aimBoardImg.sprite = aimBoardImgArr[PlayerPrefs.GetInt("currentScratcherLv", 0)];
         //this.transform.DOScale(new Vector3(4, 2, 0), 0.5f);
     }
     void Update()
@@ -48,10 +54,13 @@ public class BossController : MonoBehaviour
         //this.hp = hpArr[GameDirector.stageLevel, PlayerPrefs.GetInt("powerLevel")];
         if (isFirstTime)
         {
-            this.maxHp = this.hp = hpArr[(GameDirector.stageLevel - 1), 0];
+            // Debug.Log(PlayerPrefs.GetInt("currentScratcherLv", 0) + "??");
+            // Debug.Log(hpArr[(GameDirector.stageLevel - 1), PlayerPrefs.GetInt("currentScratcherLv", 0)] + "???");
+            this.maxHp = this.hp = hpArr[(GameDirector.stageLevel - 1), PlayerPrefs.GetInt("currentScratcherLv", 2)];
             this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5];
             isFirstTime = false;
             hpBar.fillAmount = 1;
+            hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * 100);
         }
         QuizTXT.text = "";
         this.transform.position = new Vector3(6.0f, 0, 0);
@@ -134,6 +143,7 @@ public class BossController : MonoBehaviour
         aimImg.GetComponentInChildren<Image>().DOFade(0, 0.5f).SetDelay(0.3f);
         DOTween.To(() => aimBoardImg.fillAmount, x => aimBoardImg.fillAmount = x, 0, 0.2f).SetDelay(0.3f);
         DOTween.To(() => hpBar.fillAmount, x => hpBar.fillAmount = x, (1.0f * this.hp) / this.maxHp, 0.4f).SetDelay(0.4f);
+        hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * (this.hp * 100 / this.maxHp));
     }
     public void WrongAns()
     {
@@ -144,8 +154,8 @@ public class BossController : MonoBehaviour
     public void Die()
     {
         isFirstTime = true;
-        hpBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(150f, 0.6f);
-        scoreBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-150f, 0.6f);
+        hpBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(180f, 0.6f).SetDelay(0.6f);
+        scoreBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-150f, 0.6f).SetDelay(0.6f);
         this.DeathFb?.PlayFeedbacks();
         this.SpriteRenderer.transform.DOScale(new Vector3(0, 0, 0), 0.1f)
             .SetDelay(0.5f)
@@ -156,10 +166,10 @@ public class BossController : MonoBehaviour
     }
     public void Runaway()
     {
-        hpBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(150f, 0.6f);
-        scoreBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-150f, 0.6f);
-        this.SpriteRenderer.transform.DOScale(new Vector3(0.2f, 0.2f, 0), 0.5f).SetDelay(0.5f);
-        this.transform.DOMoveX(-6f, 0.5f).SetDelay(0.7f)
+        hpBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(180f, 0.6f).SetDelay(0.6f);
+        scoreBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-150f, 0.6f).SetDelay(0.6f);
+        this.SpriteRenderer.transform.DOScale(new Vector3(0.2f, 0.2f, 0), 0.5f).SetDelay(1f);
+        this.transform.DOMoveX(-6f, 0.5f).SetDelay(1f)
         .OnComplete(() =>
             {
                 this.gameObject.SetActive(false);

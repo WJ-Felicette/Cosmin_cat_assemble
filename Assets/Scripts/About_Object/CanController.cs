@@ -8,9 +8,11 @@ public class CanController : ObjectController
 {
     // Start is called before the first frame update
     private IObjectPool<CanController> _canPool;
+    [SerializeField] SpriteRenderer SpriteRenderer;
+    [SerializeField] Sprite[] imgArr;
     void Start()
     {
-
+        SpriteRenderer.sprite = imgArr[PlayerPrefs.GetInt("currentShelfLv", 0)];
     }
     public void SetPool(IObjectPool<CanController> pool)
     {

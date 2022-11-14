@@ -19,10 +19,11 @@ public class TalkDirector : MonoBehaviour
     QuizDirector QuizDirector;
     GameDirector GameDirector;
     //[SerializeField] WJ_Sample WJ_Sample;
-    [SerializeField] SpriteRenderer BG_talk_SpriteRenderer;
+    [SerializeField] Image BG_talk_Image;
     [SerializeField] GameObject Boss_img;
     [SerializeField] Sprite[] Boss_img_arr;
     [SerializeField] GameObject Player_img;
+    [SerializeField] Sprite[] Player_img_arr;
     [SerializeField] GameObject[] Boss_talk_bubble = new GameObject[2];
     [SerializeField] GameObject[] Player_talk_bubble = new GameObject[2];
     [SerializeField] GameObject[] TalkArr = new GameObject[3];
@@ -39,19 +40,20 @@ public class TalkDirector : MonoBehaviour
     {
         Debug.Log("Start Talk!");
         gameObject.SetActive(true);
+        Player_img.GetComponent<Image>().sprite = Player_img_arr[GameDirector.catID];
         Boss_img.GetComponent<Image>().sprite = Boss_img_arr[GameDirector.stageLevel];
         //WJ_Sample.OnClick_MakeQuestion();
         this.cnt = 0;
         this.talkCnt = 0;
-        BG_talk_SpriteRenderer.DOFade(0.5f, 0.25f);
-        Player_img.GetComponent<RectTransform>().DOAnchorPosX(212.0f, 0.25f).SetDelay(0.25f);
-        Boss_img.GetComponent<RectTransform>().DOAnchorPosX(-168.0f, 0.5f).SetDelay(0.5f);
+        BG_talk_Image.DOFade(0.5f, 0.25f);
+        Player_img.GetComponent<RectTransform>().DOAnchorPosX(100f, 0.25f).SetDelay(0.25f);
+        Boss_img.GetComponent<RectTransform>().DOAnchorPosX(-100f, 0.5f).SetDelay(0.5f);
         Player_img.GetComponent<RectTransform>().DOAnchorPosY(Player_img.GetComponent<RectTransform>().anchoredPosition.y + 30.0f, 1.6f).SetDelay(0.6f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutCubic);
         Boss_img.GetComponent<RectTransform>().DOAnchorPosY(Boss_img.GetComponent<RectTransform>().anchoredPosition.y - 30.0f, 1.6f).SetDelay(0.6f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutCubic);
         foreach (GameObject talk in this.TalkArr)
         {
             talk.GetComponent<Button>().interactable = false;
-            talk.GetComponent<RectTransform>().DOScale(Vector3.one, 0.25f);
+            talk.GetComponent<RectTransform>().DOScale(Vector3.one * 0.6f, 0.25f);
         }
         this.state = 1;
 
@@ -61,7 +63,7 @@ public class TalkDirector : MonoBehaviour
     {
         Player_img.GetComponent<RectTransform>().DOAnchorPosX(-500.0f, 0.25f);
         Boss_img.GetComponent<RectTransform>().DOAnchorPosX(500.0f, 0.25f);
-        BG_talk_SpriteRenderer.DOFade(0.0f, 0.25f);
+        BG_talk_Image.DOFade(0.0f, 0.25f);
         //Boss_img.GetComponent<RectTransform>().DOAnchorPosX(-500.0f, 0.25f);
         foreach (GameObject talk in this.Boss_talk_bubble)
         {

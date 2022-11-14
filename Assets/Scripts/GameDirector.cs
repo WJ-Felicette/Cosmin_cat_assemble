@@ -56,8 +56,8 @@ public class GameDirector : MonoBehaviour
         //     this.StartQuizMod();
         // }
 
-        //if (this.ObjectDirector.cnt % 3 == 2)
-        if (this.ObjectDirector.cnt % 10 == 9)
+        if (this.ObjectDirector.cnt % 3 == 2)
+        //if (this.ObjectDirector.cnt % 10 == 9)
         {
             this.ObjectDirector.cnt++;
             this.mod = 2;

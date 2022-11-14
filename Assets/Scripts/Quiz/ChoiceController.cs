@@ -22,6 +22,7 @@ public class ChoiceController : MonoBehaviour
     [SerializeField] TEXDraw ValueUI;
     [SerializeField] MMFeedbacks CorrectFb;
     [SerializeField] SpriteRenderer Render;
+    [SerializeField] Sprite[] imgArr;
     // Start is called before the first frame update
     void Awake()
     {
@@ -29,6 +30,7 @@ public class ChoiceController : MonoBehaviour
         this.Render.transform.localScale = Vector3.zero;
         this.defaultPos = new Vector3(0.9f * this.id - 1.8f, -2.2f, 0);
         gameObject.SetActive(false);
+        Render.sprite = imgArr[PlayerPrefs.GetInt("currentScratcherLv", 0)];
         //Debug.Log(this.ValueUI);
     }
     public void Init()

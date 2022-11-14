@@ -181,6 +181,11 @@ MonoBehaviour:
   ValueUI: {fileID: 3202255210319590511}
   CorrectFb: {fileID: 2139356309633227888}
   Render: {fileID: 8824163438253095158}
+  imgArr:
+  - {fileID: 21300000, guid: dfc5a8133cbed104f8b35a1dedeca00d, type: 3}
+  - {fileID: 21300000, guid: 79181266c0bc25c4882f31e83a1d225b, type: 3}
+  - {fileID: 21300000, guid: 8962a70ebff29d9409dbdd68822f3b87, type: 3}
+  - {fileID: 21300000, guid: b4d28b14389b61145873063eaf57eb78, type: 3}
 --- !u!61 &-102657935919602040
 BoxCollider2D:
   m_ObjectHideFlags: 0

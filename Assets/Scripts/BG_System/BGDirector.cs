@@ -23,6 +23,7 @@ public class BGDirector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(Camera.main.orthographicSize);
         GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         this.Star_down_Renderer = Star_down.GetComponent<ParticleSystemRenderer>();
         this.Star_down_module = Star_down.main;

@@ -8,12 +8,11 @@ using TMPro;
 public class BoosterGauge : MonoBehaviour
 {
     int mod = 1;
-    public Image BoosterGaugeImg;
-    public float currentValue;
-    public int boostLevel = 0;
+    [SerializeField] Image BoosterGaugeImg;
+    public float currentValue = 98f;
+    public int boostLevel;
     public float speed = 10.0f;
-    [SerializeField] RectTransform BoostRectTransform;
-    float[] amountArr = { 0.025f, 0.275f, 0.33f, 0.665f, 0.72f, 0.97f };
+    float[] amountArr = { 0.034f, 0.327f, 0.334f, 0.659f, 0.673f, 0.999f };
     //[SerializeField] RectTransform ScoreRectTransform;
     // Start is called before the first frame update
     void Start()
@@ -60,15 +59,12 @@ public class BoosterGauge : MonoBehaviour
     public void SetQuizMod()
     {
         this.mod = 2;
-        //Debug.Log(this.BoostRectTransform.anchoredPosition.y);
-        this.BoostRectTransform.DOAnchorPosY(150.0f, 1.0f);
         //this.transform.DOMoveY(this.transform.position.y + -5.0f, 1.0f);
     }
     public void SetNormalMod()
     {
         this.boostLevel = 2;
         this.mod = 1;
-        this.BoostRectTransform.DOAnchorPosY(-150.0f, 1.0f);
         //this.transform.DOMoveY(this.transform.position.y + 5.0f, 1.0f);
     }
 }

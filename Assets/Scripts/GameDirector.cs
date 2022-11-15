@@ -17,7 +17,7 @@ public class GameDirector : MonoBehaviour
     PlayerController PlayerController;
     ObjectDirector ObjectDirector;
     QuizDirector QuizDirector;
-    BoosterGauge BoosterGauge;
+    [SerializeField] BoosterGauge BoosterGauge;
     TalkDirector TalkDirector;
     TextMeshProUGUI ScoreUI;
     BGDirector BGDirector;
@@ -32,7 +32,7 @@ public class GameDirector : MonoBehaviour
         this.ObjectDirector = GameObject.Find("ObjectDirector").GetComponent<ObjectDirector>();
         this.QuizDirector = GameObject.Find("QuizDirector").GetComponent<QuizDirector>();
         this.ScoreUI = GameObject.Find("ScoreUI").GetComponent<TextMeshProUGUI>();
-        this.BoosterGauge = GameObject.Find("BoosterGauge").GetComponent<BoosterGauge>();
+        //this.BoosterGauge = GameObject.Find("BoosterGauge").GetComponent<BoosterGauge>();
         this.TalkDirector = GameObject.Find("TalkDirector").GetComponent<TalkDirector>();
         this.BGDirector = GameObject.Find("BGDirector").GetComponent<BGDirector>();
         this.SetStage(this.stageLevel);
@@ -68,6 +68,7 @@ public class GameDirector : MonoBehaviour
             this.mod = 2;
             this.QuizDirector.BossWaringMove();
             this.BoosterGauge.SetQuizMod();
+            this.MainGameUIController.SetQuizMod();
             //Debug.Log("Mod: " + this.mod);
             //this.StartQuizMod();
         }
@@ -80,10 +81,11 @@ public class GameDirector : MonoBehaviour
     }
     void InitScene()
     {
-        PlayerController.transform.DOMoveY(-4f, 3.0f)
+        PlayerController.transform.DOMoveY(PlayerController.defaultY, 3.0f)
         .OnComplete(() =>
         {
-            Debug.Log("Call!");
+            this.MainGameUIController.SetNormalMod();
+            //Debug.Log("Call!");
             ObjectDirector.Init();
         });
     }
@@ -91,6 +93,7 @@ public class GameDirector : MonoBehaviour
     {
         this.mod = 1;
         this.BoosterGauge.SetNormalMod();
+        this.MainGameUIController.SetNormalMod();
         this.ObjectDirector.NextBundleStart();
     }
     public IEnumerator StartQuizMod()

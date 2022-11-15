@@ -10,16 +10,32 @@ using MoreMountains.Feedbacks;
 public class MainGameUIController : MonoBehaviour
 {
     GameDirector GameDirector;
+    PlayerController PlayerController;
+    int catID = 0;
+
+    ///--------------About NewGauge-------------------
+    [Header("New Gauge System")]
+    [SerializeField] GameObject NewGauge_Window;
+    [SerializeField] Image G_HPGauge;
+    [SerializeField] Image G_BooterGauge;
+    [SerializeField] Sprite[] G_Head_Arr;
+    [SerializeField] Image G_Head;
+    ///--------------------------------------------
+
+    [Header("Common Elements!")]
     int highScore = 0;
     [SerializeField] MMFeedbacks MainGameLoadFeedbacks;
     [SerializeField] GameObject BG;
     [SerializeField] Sprite[] catHeadArr;
+
     ///--------------About Pause-------------------
+    [Header("About Pause")]
     [SerializeField] GameObject Pause_Window;
     [SerializeField] Image Pause_CatHead;
     ///--------------------------------------------
 
     ///--------------About GameOver-------------------
+    [Header("About GameOver")]
     [SerializeField] GameObject GameOver_Window;
     [SerializeField] Image GameOver_CatHead;
     [SerializeField] Button[] GameOver_BTN; //0: RestartBtn, 1:GoMainBtn
@@ -33,16 +49,31 @@ public class MainGameUIController : MonoBehaviour
     void Start()
     {
         GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        Pause_CatHead.sprite = catHeadArr[GameDirector.catID];
-        GameOver_CatHead.sprite = catHeadArr[GameDirector.catID];
+        PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
+        catID = GameDirector.catID;
+        G_Head.sprite = G_Head_Arr[catID];
+        Pause_CatHead.sprite = catHeadArr[catID];
+        GameOver_CatHead.sprite = catHeadArr[catID];
         this.highScore = PlayerPrefs.GetInt("highScore", 0);
     }
 
     // Update is called once per frame
     void Update()
     {
-
+        G_HPGauge.fillAmount = PlayerController.hp / 100;
     }
+
+    ///--------------About Pause-------------------
+    public void SetQuizMod()
+    {
+        NewGauge_Window.GetComponent<RectTransform>().DOAnchorPosY(-60f, 0.2f).SetEase(Ease.InOutSine);
+    }
+    public void SetNormalMod()
+    {
+        NewGauge_Window.GetComponent<RectTransform>().DOAnchorPosY(50f, 0.2f).SetEase(Ease.InOutSine);
+    }
+    ///--------------------------------------------
+
     ///--------------About Pause-------------------
     public void OnClickPause()
     {

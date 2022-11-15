@@ -142,7 +142,7 @@ public class BGDirector : MonoBehaviour
             .AppendInterval(0.5f)
             .AppendCallback(() => BoostVFXController.SetTPBoost(false))
             .Join(DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.defaultSpeed, 2.5f).SetEase(Ease.OutExpo))
-            .Join(PaleyrGo.transform.DOMoveY(-4.0f, 2.5f).SetEase(Ease.OutExpo))
+            .Join(PaleyrGo.transform.DOMoveY(PaleyrGo.GetComponent<PlayerController>().defaultY, 2.5f).SetEase(Ease.OutExpo))
             .AppendCallback(() =>
             {
                 this.hole.SetActive(false);

@@ -30,6 +30,7 @@ public class CanController : ObjectController
     }
     public override void Kill()
     {
+        DOTween.Kill(this);
         base.Kill();
         _canPool.Release(this);
     }

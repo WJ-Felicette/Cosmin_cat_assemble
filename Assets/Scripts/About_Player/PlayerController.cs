@@ -12,8 +12,8 @@ public class PlayerController : MonoBehaviour
 {
     GameDirector GameDirector;
     QuizDirector QuizDirector;
-    BoosterGauge BoosterGauge;
-    public float hp;
+    [SerializeField] BoosterGauge BoosterGauge;
+    public float hp; //max = 100
     public int state; //0:justFlying, 1:Boosting 2: BoostStoping 3:talking, 4:무적;
     int idx; //고양?��?�� ?��?�� ?���?, 0~4까�??
     int lastIdx; //고양?���? 직전?�� ?��?�� ?���?
@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
     float boostPlus;
     float[] boostPlusArr = { 0.3f, 0.4f, 0.5f, 0.6f };
     public int boostLevel = 0; //?��?��?���? �? �? �??��?���? ?��?��?��?���? ????��
+    public float defaultY = -3.5f;
     Vector3 destination; //고양?���? ?��?��?�� ?��치�?? ????��
     Vector3 dMousePos = Vector3.zero; //~mousePos?�� 모두 ?���? 조작?�� ?��?��?��?�� 것들
     Vector3 uMousePos = Vector3.zero;
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
         this.GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         this.SpriteRenderer = gameObject.GetComponentsInChildren<SpriteRenderer>()[0];
         this.QuizDirector = GameObject.Find("QuizDirector").GetComponent<QuizDirector>();
-        this.BoosterGauge = GameObject.Find("BoosterGauge").GetComponent<BoosterGauge>();
+        //this.BoosterGauge = GameObject.Find("BoosterGauge").GetComponent<BoosterGauge>();
         //Debug.Log(this.SpriteRenderer);
         this.rigd2D = gameObject.GetComponent<Rigidbody2D>();
         this.SetSwingbySystem();
@@ -57,11 +58,11 @@ public class PlayerController : MonoBehaviour
     }
     public void Init()
     {
-        this.hp = 20.0f;
+        this.hp = 100.0f;
         this.state = 0;
         this.idx = 2;
         this.lastIdx = this.idx;
-        this.destination = new Vector3(0, -4, 0);
+        this.destination = new Vector3(0, this.defaultY, 0);
         this.SpriteRenderer.sprite = catImgArr[GameDirector.catID]; //DB need, PlayerPrefs.getInt("catID")
         this.boostPlus = this.boostPlusArr[PlayerPrefs.GetInt("currentWheelLv", 0)];
         //this.boostPlus = this.boostPlusArr[3];
@@ -105,7 +106,7 @@ public class PlayerController : MonoBehaviour
                         {
                             this.idx--;
                         }
-                        this.destination = new Vector3((this.idx - 2) * 0.9f, -4, 0);
+                        this.destination = new Vector3((this.idx - 2) * 0.9f, this.defaultY, 0);
 
                         if (hitData.collider != null && this.idx != this.lastIdx)
                         {
@@ -149,7 +150,7 @@ public class PlayerController : MonoBehaviour
 
                             DOTween.To(() => this.vcam.m_Lens.OrthographicSize, s => this.vcam.m_Lens.OrthographicSize = s, 5.1f, 0.4f)
                                 .SetEase(Ease.OutCirc);
-                            this.transform.DOMoveY(-3.0f + 0.3f * (this.boostLevel - 1), 0.3f)
+                            this.transform.DOMoveY(-2.5f + 0.3f * (this.boostLevel - 1), 0.3f)
                                 .SetEase(Ease.OutCirc);
 
                             BoostVFXController.SetState(this.boostLevel, this.GameDirector.mod);
@@ -197,7 +198,7 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
 
         DOTween.To(() => this.vcam.m_Lens.OrthographicSize, s => this.vcam.m_Lens.OrthographicSize = s, 5.0f, 0.4f).SetEase(Ease.OutExpo);
-        this.transform.DOMoveY(-4.0f, 0.3f).SetEase(Ease.Linear);
+        this.transform.DOMoveY(this.defaultY, 0.3f).SetEase(Ease.Linear);
         BoostVFXController.SetState(0, this.GameDirector.mod);
 
         yield return new WaitForSeconds(0.5f);

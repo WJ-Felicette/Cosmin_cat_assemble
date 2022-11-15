@@ -21,7 +21,7 @@ public class GameDirector : MonoBehaviour
     TalkDirector TalkDirector;
     TextMeshProUGUI ScoreUI;
     BGDirector BGDirector;
-    MainGameUIController MainGameUIController;
+    [SerializeField] MainGameUIController MainGameUIController;
 
     [SerializeField] TextMeshProUGUI stageTXT;
     string[] stageNameArr = { "포탈", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주쥐 본부" };
@@ -56,13 +56,13 @@ public class GameDirector : MonoBehaviour
         // {
         //     this.StartQuizMod();
         // }
-        if (PlayerController.hp < 0)
+        if (PlayerController.hp < 0 && this.mod != 0)
         {
-            //MainGameUIController.GameOverWindowPopUp(this.score, );
+            StartCoroutine(this.EndGame());
         }
 
-        if (this.ObjectDirector.cnt % 3 == 2)
-        //if (this.ObjectDirector.cnt % 10 == 9)
+        //if (this.ObjectDirector.cnt % 3 == 2)
+        if (this.ObjectDirector.cnt % 10 == 9)
         {
             this.ObjectDirector.cnt++;
             this.mod = 2;
@@ -74,7 +74,7 @@ public class GameDirector : MonoBehaviour
         if (this.mod == 1)
         {
             this.score += -this.speed * Time.deltaTime;
-            this.ScoreUI.text = Mathf.Ceil(this.score).ToString();
+            this.ScoreUI.text = string.Format("{0:#,0}", Mathf.Ceil(this.score));
         }
         //Debug.Log("?냽?룄: " + this.speed);
     }
@@ -134,8 +134,11 @@ public class GameDirector : MonoBehaviour
         //     this.stageTXT.enabled = false;
         // });
     }
-    public void EndGame()
+    IEnumerator EndGame()
     {
-        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + PlayerController.canNumber);
+        this.mod = 0;
+        float _duration = PlayerController.GameOver();
+        yield return new WaitForSeconds(_duration + 0.5f);
+        MainGameUIController.GameOverWindowPopUp((int)Mathf.Ceil(this.score), PlayerController.canNumber, PlayerController.itemNumber);
     }
 }

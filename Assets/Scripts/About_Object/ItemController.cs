@@ -33,14 +33,15 @@ public class ItemController : ObjectController
         switch (this.type)
         {
             case 1:
+                PlayerPrefs.SetInt("collectible_1", PlayerPrefs.GetInt("collectible_1", 0) + 1);
                 break;
             case 2:
+                PlayerPrefs.SetInt("collectible_2", PlayerPrefs.GetInt("collectible_2", 0) + 1);
                 break;
             case 3:
+                PlayerPrefs.SetInt("collectible_3", PlayerPrefs.GetInt("collectible_3", 0) + 1);
                 break;
         }
-        if (this.type != 0)
-            Debug.Log("GET COLLECT!: " + this.type);
 
         base.KillByCat();
         _itemPool.Release(this);

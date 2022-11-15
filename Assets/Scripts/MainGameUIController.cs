@@ -109,15 +109,15 @@ public class MainGameUIController : MonoBehaviour
                         }).SetUpdate(true);
 
                 int __canScore = 0;
-                DOTween.To(() => __canScore, x => __canScore = x, _myScore, 0.2f).OnUpdate(() =>
+                DOTween.To(() => __canScore, x => __canScore = x, _canScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "°³";
+                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "ê°œ";
                         }).SetUpdate(true);
 
                 int __collectibleScore = 0;
                 DOTween.To(() => __collectibleScore, x => __collectibleScore = x, _collectibleScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "°³";
+                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "ê°œ";
                         }).SetUpdate(true);
             })
             .SetUpdate(true);
@@ -129,6 +129,13 @@ public class MainGameUIController : MonoBehaviour
                 GameOver_BTN[1].interactable = true;
             }).SetUpdate(true);
         Time.timeScale = 0;
+
+        //SetDB
+        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + _canScore);
+        if (_myScore > this.highScore)
+        {
+            PlayerPrefs.SetInt("highScore", _myScore);
+        }
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));
         // GameOver_TEXT[2].text = string.Format("{0:#,0}", _canScore);

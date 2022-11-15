@@ -38,6 +38,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Sprite[] catImgArr;
     public int canNumber = 0;
+    public int itemNumber = 0;
+
     void Awake()
     {
         this.GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
@@ -55,7 +57,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Init()
     {
-        this.hp = 100.0f;
+        this.hp = 20.0f;
         this.state = 0;
         this.idx = 2;
         this.lastIdx = this.idx;
@@ -75,7 +77,7 @@ public class PlayerController : MonoBehaviour
         RaycastHit2D hitDataLeft = Physics2D.Raycast(transform.position, Vector3.up + Vector3.left / 2, 2.0f, LayerMask.GetMask("Obstacle"));
 
         //?���? 조작 ?��?��?�� ?��?�� if?��
-        if (Input.GetMouseButtonDown(0) && GameDirector.mod != 3)
+        if (Input.GetMouseButtonDown(0) && (GameDirector.mod != 3 || GameDirector.mod != 0))
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
@@ -83,7 +85,7 @@ public class PlayerController : MonoBehaviour
             }
             //Debug.Log("Clicked!!!");
         }
-        if (Input.GetMouseButtonUp(0) && GameDirector.mod != 3)
+        if (Input.GetMouseButtonUp(0) && (GameDirector.mod != 3 || GameDirector.mod != 0))
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
@@ -211,6 +213,7 @@ public class PlayerController : MonoBehaviour
         if (go.tag == "Can")
         {
             //Destroy(go);
+            Debug.Log("Get Can: " + this.canNumber);
             this.canNumber++;
             objController.Kill();
         }
@@ -220,6 +223,10 @@ public class PlayerController : MonoBehaviour
             if (objController.type == 0)
             {
                 this.hp = this.hp + 15 > 100 ? 100 : this.hp + 15;
+            }
+            else if (objController.type != 0)
+            {
+                this.itemNumber++;
             }
             objController.KillByCat();
         }
@@ -238,8 +245,8 @@ public class PlayerController : MonoBehaviour
             {
                 this.hp -= 5.0f;
                 StartCoroutine(SetInvincible());
-                this.transform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0), 20);
-                this.transform.DOShakeRotation(0.4f, 30.0f, 15);
+                this.SpriteRenderer.transform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0), 20);
+                this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15);
                 //this.SpriteRenderer.transform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0), 20);
                 this.SpriteRenderer.DOFade(0.4f, 0.6f / 4).SetLoops(4, LoopType.Yoyo);
                 this.SpriteRenderer.DOFade(1, 0.01f).SetDelay(0.6f);
@@ -252,6 +259,18 @@ public class PlayerController : MonoBehaviour
         this.state = 4;
         yield return new WaitForSeconds(0.6f);
         this.state = 0;
+    }
+
+    public float GameOver()
+    {
+        DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, 0.0f, 2.0f).SetEase(Ease.OutExpo);
+        float _duration;
+        Sequence _S = DOTween.Sequence()
+            .Append(this.transform.DOMoveY(-7f, 1.0f))
+            .Join(this.SpriteRenderer.transform.DOShakePosition(1.0f, new Vector3(0.1f, 0.1f, 0), 20))
+            .Join(this.SpriteRenderer.transform.DOShakeRotation(1.0f, 30.0f, 15));
+        _duration = _S.Duration();
+        return _duration;
     }
 
     //-----------------About SwingBy----------------

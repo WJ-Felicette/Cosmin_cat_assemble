@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CatShopScene.unity
     guid: 5abb27554234a984bbb8b36227879e39
+  - enabled: 1
+    path: Assets/Scenes/Loading/BigTextTestReal.unity
+    guid: 25b491f867237c142aa1fdebc9280bfc
   m_configObjects: {}

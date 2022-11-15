@@ -98,29 +98,33 @@ public class ButtonHandler : MonoBehaviour
     // ex -> +��ư�� OnClick�ϸ� VolumeUp�� ���ÿ� VoluePer~~�� �ִ� �Լ� �߰�
     public void VolumeUp()
     {
-        if (vCurGauge >= 9)
-            return;
+        if (vCurGauge < 10)
+        {
+            Image tmpImage;
+            Sprite chgSprite;
 
-        Image tmpImage;
-        Sprite chgSprite;
+            tmpImage = gaugeImage[vCurGauge].GetComponent<Image>();
+            chgSprite = Resources.Load<Sprite>("Illusts/Option_illust/Volume_On");
+            vCurGauge++;
+            Debug.Log(vCurGauge + " :vCurGauge");
+            tmpImage.sprite = chgSprite;
+        }
 
-        tmpImage = gaugeImage[vCurGauge].GetComponent<Image>();
-        chgSprite = Resources.Load<Sprite>("Illusts/Option_illust/Volume_On");
-        vCurGauge++;
-        tmpImage.sprite = chgSprite;
+
     }
 
     public void VolumeDown()
     {
-        if (vCurGauge <= 0)
-            return;
+        if (vCurGauge > 0)
+        {
 
-        Image tmpImage;
-        Sprite chgSprite;
-
-        tmpImage = gaugeImage[vCurGauge].GetComponent<Image>();
-        chgSprite = Resources.Load<Sprite>("Illusts/Option_illust/Volume_Off");
-        vCurGauge--;
-        tmpImage.sprite = chgSprite;
+            Image tmpImage;
+            Sprite chgSprite;
+            vCurGauge--;
+            tmpImage = gaugeImage[vCurGauge].GetComponent<Image>();
+            chgSprite = Resources.Load<Sprite>("Illusts/Option_illust/Volume_Off");
+            Debug.Log(vCurGauge + " :vCurGauge");
+            tmpImage.sprite = chgSprite;
+        }
     }
 }

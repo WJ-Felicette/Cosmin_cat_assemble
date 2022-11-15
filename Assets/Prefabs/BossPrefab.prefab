@@ -248,7 +248,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 6d1921e29f27fa549ba392dedad4faa9, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
   BossImg:
   - {fileID: 21300000, guid: 6d1921e29f27fa549ba392dedad4faa9, type: 3}
   - {fileID: 21300000, guid: b97f040e33d06884da2ded5afc5d8046, type: 3}
-  - {fileID: 21300000, guid: d0d2626967ebc8a4e98a3c30a6e8145d, type: 3}
+  - {fileID: 21300000, guid: b97f040e33d06884da2ded5afc5d8046, type: 3}
   - {fileID: 21300000, guid: d0d2626967ebc8a4e98a3c30a6e8145d, type: 3}
   - {fileID: 21300000, guid: d0d2626967ebc8a4e98a3c30a6e8145d, type: 3}
   - {fileID: 21300000, guid: a21bd877da519ef49981d13e5b42721d, type: 3}
@@ -324,14 +324,25 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 48932f28919f61d409d7659ea8ee8338, type: 3}
   - {fileID: 21300000, guid: 6a8363ab08694974c859ae360bb087c4, type: 3}
   - {fileID: 21300000, guid: 6586ea31efa88154ba1e9b692c82e6e7, type: 3}
-  - {fileID: 21300000, guid: 1e630adfb97681740ba1644a7048a2ca, type: 3}
   - {fileID: 21300000, guid: 7ed09576a50907946be68210028d9559, type: 3}
   - {fileID: 21300000, guid: fb69200ffa752674095adc0594f91c7d, type: 3}
+  - {fileID: 21300000, guid: fb69200ffa752674095adc0594f91c7d, type: 3}
   hpBar: {fileID: 0}
+  hpText: {fileID: 0}
   scoreBar: {fileID: 0}
   aimGo: {fileID: 0}
-  aimImg: {fileID: 0}
   PrizeBundle: {fileID: 0}
+  aimImgArr:
+  - {fileID: 21300000, guid: 8c966e9e2ee3bce4792681d480423617, type: 3}
+  - {fileID: 21300000, guid: 99cfa1ed1bb60c4488a256d2d9c9fc8f, type: 3}
+  - {fileID: 21300000, guid: 5d5f37d60f48c3d4aa75c307c46fc587, type: 3}
+  - {fileID: 21300000, guid: 00212227a58c3d64484adc9bdd1f04b4, type: 3}
+  aimImg: {fileID: 0}
+  aimBoardImgArr:
+  - {fileID: 21300000, guid: b7b782b081bacfd42a6a55e00efe274a, type: 3}
+  - {fileID: 21300000, guid: feafac6ed843c484384ac746b9064a9f, type: 3}
+  - {fileID: 21300000, guid: a6d1ebc1865666c4faedd17a1412aab8, type: 3}
+  - {fileID: 21300000, guid: b4e0bde4019b05845b1c045195a04e94, type: 3}
   aimBoardImg: {fileID: 0}
   hp: 3
 --- !u!1001 &3935730518294697369

@@ -5,6 +5,7 @@ using UnityEngine;
 public class CatsController : MonoBehaviour
 {
     public GameObject[] catArr;
+    public int seletedCatID = -1;
     int[,] catPosArr = new int[3, 2];
     int[,] catXY = { { 0, 800, -413, 1, 488, 1 }, { 595, -685, -424, 623, 766, 184 }, { -623, 940, 676, -470, -104, 475 } };
     // Start is called before the first frame update
@@ -29,7 +30,10 @@ public class CatsController : MonoBehaviour
     {
         for (int i = 0; i < 3; i++)
         {
-            catArr[i].GetComponent<RectTransform>().localPosition = new Vector3(this.catPosArr[i, 0], this.catPosArr[i, 1] + Mathf.Sin(Time.time * 2 + i * 2) * 40, 0);
+            if (this.seletedCatID != i)
+            {
+                catArr[i].GetComponent<RectTransform>().localPosition = new Vector3(this.catPosArr[i, 0], this.catPosArr[i, 1] + Mathf.Sin(Time.time * 2 + i * 2) * 40, 0);
+            }
         }
     }
 

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 
 public class SceneManager : MonoBehaviour
 {
     bool isLoading = false;
+    bool _isAimationDone;
     CatsController CatsController;
+
+    [SerializeField] MMFeedbacks MainGameLoadFeedbacks;
     // Start is called before the first frame update
     void Awake()
     {
@@ -35,12 +39,32 @@ public class SceneManager : MonoBehaviour
         {
             this.isLoading = true;
             PlayerPrefs.SetInt("selectedCatID", _id);
-            CatsController.catArr[_id].GetComponent<RectTransform>().DOLocalMoveY(3000f, 1.0f).SetEase(Ease.InSine)
+            CatsController.seletedCatID = _id;
+            DOTween.Sequence()
+                .Append(CatsController.catArr[_id].GetComponent<RectTransform>().DOLocalMoveY(3000f, 1.0f).SetEase(Ease.InSine))
+                .AppendInterval(0.5f)
                 .OnComplete(() =>
                 {
-                    StartCoroutine(LoadMainGame(_id));
+                    CatsController.catArr[_id].SetActive(false);
+                    MainGameLoadFeedbacks?.PlayFeedbacks();
                 });
         }
+        // if (this.isLoading == false)
+        // {
+        //     this.isLoading = true;
+        //     //DOTween.Clear(true);
+        //     PlayerPrefs.SetInt("selectedCatID", _id);
+        //     _isAimationDone = false;
+        //     DOTween.Sequence()
+        //         .Append(CatsController.catArr[_id].GetComponent<RectTransform>().DOLocalMoveY(3000f, 1.0f).SetEase(Ease.InSine))
+        //         .AppendInterval(0.5f)
+        //         .OnComplete(() =>
+        //         {
+        //             _isAimationDone = true;
+        //             StartCoroutine(LoadMainGame());
+        //         });
+
+        // }
         // if (this.isLoading == false)
         // {
         //     this.isLoading = true;
@@ -53,20 +77,23 @@ public class SceneManager : MonoBehaviour
         //         });
         // }
     }
-    IEnumerator LoadMainGame(int _id)
-    {
-        yield return new WaitForSeconds(0.2f);
-        AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainGame");
-        if (asyncOperation.isDone)
-        {
-            Debug.Log("Done");
-        }
-        // while (!asyncOperation.isDone)
-        // {
-        //     Debug.Log(asyncOperation.progress * 100 + "%");
-        //     yield return null;
-        //     //CatsController.catArr[_id].GetComponent<RectTransform>().position = new Vector3(CatsController.catArr[_id].GetComponent<RectTransform>().position.x, 3000f * asyncOperation.progress, 0);
-        //}
-    }
+    // IEnumerator LoadMainGame()
+    // {
+    //     yield return null;
+    //     AsyncOperation asyncOperation = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("MainGame");
+    //     asyncOperation.allowSceneActivation = false;
+    //     while (!asyncOperation.isDone)
+    //     {
+    //         if (asyncOperation.progress >= 0.9f)
+    //         {
+    //             if (_isAimationDone)
+    //             {
+    //                 Debug.Log("GO MAIN!!");
+    //                 asyncOperation.allowSceneActivation = true;
+    //             }
+    //         }
+    //         yield return null;
+    //     }
+    // }
 }
 

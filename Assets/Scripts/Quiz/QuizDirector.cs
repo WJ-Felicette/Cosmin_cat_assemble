@@ -35,7 +35,7 @@ public class QuizDirector : MonoBehaviour
     }
     public void Init()
     {
-        Debug.Log("Start Quiz");
+        //Debug.Log("Start Quiz");
         this.state = 1;
         this.round = 4;
         GameDirector.mod = 3;
@@ -98,7 +98,7 @@ public class QuizDirector : MonoBehaviour
         this.quizCounter++;
 
         this.state = 3;
-        Debug.Log("Selecting : " + _id + "// ans: " + this.answerId);
+        //Debug.Log("Selecting : " + _id + "// ans: " + this.answerId);
         this.choiceControllerBundle[_id].Selected(this.answerId, this.BossController.gameObject.transform.position);
         if (_id == this.answerId)
         {

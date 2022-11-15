@@ -38,7 +38,7 @@ public class TalkDirector : MonoBehaviour
 
     public void Init()
     {
-        Debug.Log("Start Talk!");
+        //Debug.Log("Start Talk!");
         gameObject.SetActive(true);
         Player_img.GetComponent<Image>().sprite = Player_img_arr[GameDirector.catID];
         Boss_img.GetComponent<Image>().sprite = Boss_img_arr[GameDirector.stageLevel];

@@ -21,6 +21,7 @@ public class GameDirector : MonoBehaviour
     TalkDirector TalkDirector;
     TextMeshProUGUI ScoreUI;
     BGDirector BGDirector;
+    MainGameUIController MainGameUIController;
 
     [SerializeField] TextMeshProUGUI stageTXT;
     string[] stageNameArr = { "포탈", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주쥐 본부" };
@@ -47,7 +48,7 @@ public class GameDirector : MonoBehaviour
 
 
         //DB빋이오기
-        this.catID = PlayerPrefs.GetInt("selectedCatID", 2);
+        this.catID = PlayerPrefs.GetInt("selectedCatID", 0);
     }
     void Update()
     {
@@ -55,6 +56,10 @@ public class GameDirector : MonoBehaviour
         // {
         //     this.StartQuizMod();
         // }
+        if (PlayerController.hp < 0)
+        {
+            //MainGameUIController.GameOverWindowPopUp(this.score, );
+        }
 
         if (this.ObjectDirector.cnt % 3 == 2)
         //if (this.ObjectDirector.cnt % 10 == 9)

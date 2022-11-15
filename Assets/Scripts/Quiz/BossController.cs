@@ -138,6 +138,7 @@ public class BossController : MonoBehaviour
         QuizTXT.text = "";
         this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15).SetDelay(0.3f).OnComplete(() =>
         {
+            this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5 + (((this.maxHp - this.hp) * 4) / this.maxHp)];
             this.PutOutCan(_prizeValue);
         });
         aimImg.GetComponentInChildren<Image>().DOFade(0, 0.5f).SetDelay(0.3f);

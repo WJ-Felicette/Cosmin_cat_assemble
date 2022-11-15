@@ -111,7 +111,7 @@ public class WJ_Sample : MonoBehaviour
     // 보기 선택
     public void Select_Ansr(int _nIndex)
     {
-        Debug.Log("SELECTED");
+        //Debug.Log("SELECTED");
         //this.ReflectResult(_nIndex); //민석 추가
         switch (eState)
         {
@@ -279,7 +279,7 @@ public class WJ_Sample : MonoBehaviour
         {
             if (i == nAnsridx)
             {
-                Debug.Log("Set AnsIDX: " + i);
+                //Debug.Log("Set AnsIDX: " + i);
                 QuizDirector.answerId = i;
                 btAnsr[i].gameObject.GetComponent<ChoiceController>().nextText = strAnswer;
                 //txAnsr[i].text = strAnswer;

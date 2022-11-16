@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour
     private IObjectPool<SwingbyText> swingbyPool;
 
     [SerializeField] Sprite[] catImgArr;
+    [SerializeField] TextMeshProUGUI CanSocreUI;
     public int canNumber = 0;
     public int itemNumber = 0;
 
@@ -214,8 +215,8 @@ public class PlayerController : MonoBehaviour
         if (go.tag == "Can")
         {
             //Destroy(go);
-            Debug.Log("Get Can: " + this.canNumber);
             this.canNumber++;
+            CanSocreUI.text = string.Format("{0:#,0}", this.canNumber);
             objController.Kill();
         }
         else if (go.tag == "Item")

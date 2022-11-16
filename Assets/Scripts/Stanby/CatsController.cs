@@ -20,7 +20,18 @@ public class CatsController : MonoBehaviour
         {
             this.catPosArr[_randArr[j], 0] = catXY[_ran, j * 2] * _flip;
             this.catPosArr[_randArr[j], 1] = catXY[_ran, j * 2 + 1] * _flip;
-            catArr[_randArr[j]].GetComponent<RectTransform>().localPosition = new Vector3(this.catPosArr[_randArr[j], 0], this.catPosArr[_randArr[j], 1], 0);
+            if (_randArr[j] == 1 && PlayerPrefs.GetInt("newton", 0) == 0)
+            {
+                catArr[1].SetActive(false);
+            }
+            else if (_randArr[j] == 2 && PlayerPrefs.GetInt("eins", 0) == 0)
+            {
+                catArr[2].SetActive(false);
+            }
+            else
+            {
+                catArr[_randArr[j]].GetComponent<RectTransform>().localPosition = new Vector3(this.catPosArr[_randArr[j], 0], this.catPosArr[_randArr[j], 1], 0);
+            }
         }
     }
 

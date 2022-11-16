@@ -78,7 +78,7 @@ public class BossController : MonoBehaviour
     {
 
         float ran_X = Random.Range(-100, 100) / 100.0f;
-        float ran_Y = Random.Range(100, 450) / 100.0f;
+        float ran_Y = Random.Range(100, 300) / 100.0f;
         Vector3 NewBossPostion = new Vector3(ran_X, ran_Y, 0);
         Vector3 RandomPostion = Vector3.zero;
 

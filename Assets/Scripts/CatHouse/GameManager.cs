@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
 
     public Button hidePop;
     public TMP_Text PopMainText;
-    public GameObject BackLight;
+    // public GameObject BackLight;
     public GameObject[] PopImg;
     public TMP_Text[] PopSubText_0;
     public TMP_Text[] PopSubText_1;
@@ -151,7 +151,7 @@ public class GameManager : MonoBehaviour
         WheelTextSetting();
         PopSetting(0);
         PopSubText_0[0].SetText("캣 휠 LV." + currentLv[0]);
-        PopSubText_1[0].SetText("부스터 시간 + " + currentLv[0] + "초");
+        PopSubText_1[0].SetText("부스터 시간 + " + currentLv[0]*0.5f + "초");
         Save();
     }
     public void ScratcherUpgrade(){
@@ -161,7 +161,7 @@ public class GameManager : MonoBehaviour
         ScratcherTextSetting();
         PopSetting(1);
         PopSubText_0[1].SetText("스크래쳐 LV." + currentLv[1]);
-        PopSubText_1[1].SetText("공격력 + " + currentLv[1]);
+        PopSubText_1[1].SetText("쥐덫 레벨 " + currentLv[1]);
         Save();
     }
     public void TowerUpgrade(){
@@ -171,7 +171,7 @@ public class GameManager : MonoBehaviour
         TowerTextSetting();
         PopSetting(2);
         PopSubText_0[2].SetText("캣 타워 LV." + currentLv[2]);
-        PopSubText_1[2].SetText("점수 획득량 + " + currentLv[2] + "%");
+        PopSubText_1[2].SetText("점수 획득량 + " + currentLv[2]*5 + "%");
         Save();
     }
     public void ShelfUpgrade(){
@@ -181,7 +181,7 @@ public class GameManager : MonoBehaviour
         ShelfTextSetting();
         PopSetting(3);
         PopSubText_0[3].SetText("선반 LV." + currentLv[3]);
-        PopSubText_1[3].SetText("통조림 획득량 + " + currentLv[3] + "%");
+        PopSubText_1[3].SetText("통조림 획득량 + " + currentLv[3]*5 + "%");
         Save();
     }
     public void RoomUpgrade(){
@@ -213,7 +213,7 @@ public class GameManager : MonoBehaviour
             priceText[0].SetText(string.Format("{0:n0}", priceArr[currentLv[0]]));
         }
         mainText[0].SetText("캣 휠 LV." + currentLv[0]);
-        subText[0].SetText("부스터 시간 + " + currentLv[0] + "초");
+        subText[0].SetText("부스터 시간 + " + currentLv[0]*0.5f + "초");
     }
 
     void ScratcherTextSetting(){
@@ -225,7 +225,7 @@ public class GameManager : MonoBehaviour
             priceText[1].SetText(string.Format("{0:n0}", priceArr[currentLv[1]]));
         }
         mainText[1].SetText("스크래쳐 LV." + currentLv[1]);
-        subText[1].SetText("공격력 + " + currentLv[1]);
+        subText[1].SetText("쥐덫 레벨 " + currentLv[1]);
     }
 
     void TowerTextSetting(){
@@ -237,7 +237,7 @@ public class GameManager : MonoBehaviour
             priceText[2].SetText(string.Format("{0:n0}", priceArr[currentLv[2]]));
         }
         mainText[2].SetText("캣 타워 LV." + currentLv[2]);
-        subText[2].SetText("점수 획득량 + " + currentLv[2] + "%");
+        subText[2].SetText("점수 획득량 + " + currentLv[2]*5 + "%");
     }
 
     void ShelfTextSetting(){
@@ -249,7 +249,7 @@ public class GameManager : MonoBehaviour
             priceText[3].SetText(string.Format("{0:n0}", priceArr[currentLv[3]]));
         }
         mainText[3].SetText("선반 LV." + currentLv[3]);
-        subText[3].SetText("통조림 획득량 + " + currentLv[3] + "%");
+        subText[3].SetText("통조림 획득량 + " + currentLv[3]*5 + "%");
     }
 
     void RoomTextSetting(){
@@ -269,7 +269,7 @@ public class GameManager : MonoBehaviour
         shopPanel.gameObject.SetActive(isPopUp);
         hideBtn.gameObject.SetActive(isPopUp);
         PopMainText.gameObject.SetActive(!isPopUp);
-        BackLight.gameObject.SetActive(!isPopUp);
+        // BackLight.gameObject.SetActive(!isPopUp);
         PopImg[x].gameObject.SetActive(!isPopUp);
         PopSubText_0[x].gameObject.SetActive(!isPopUp);
         PopSubText_1[x].gameObject.SetActive(!isPopUp);

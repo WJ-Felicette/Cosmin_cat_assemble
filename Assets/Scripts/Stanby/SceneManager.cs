@@ -4,27 +4,33 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using MoreMountains.Feedbacks;
+using TMPro;
 
 public class SceneManager : MonoBehaviour
 {
     bool isLoading = false;
     bool _isAimationDone;
     CatsController CatsController;
+    public TMP_Text goldText;
+    int gold;
+
 
     [SerializeField] MMFeedbacks MainGameLoadFeedbacks;
     // Start is called before the first frame update
     void Awake()
     {
+        Load();
         Debug.Log("Stanby Awake");
         this.isLoading = false;
         CatsController = GameObject.Find("CatsController").GetComponent<CatsController>();
+
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
+    private void LateUpdate() {
+        goldText.text = string.Format("{0:n0}", gold);
     }
+
     public void ToCatHouse()
     {
         if (this.isLoading == false)
@@ -76,6 +82,10 @@ public class SceneManager : MonoBehaviour
         //             UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
         //         });
         // }
+    }
+
+    void Load(){
+        gold = PlayerPrefs.GetInt("gold", 99999);
     }
     // IEnumerator LoadMainGame()
     // {

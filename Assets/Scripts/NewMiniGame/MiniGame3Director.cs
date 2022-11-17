@@ -20,7 +20,7 @@ public class MiniGame3Director : MonoBehaviour
     int[] resultArr = { 0, 0, 0, 0 };
     int score = 0;
     int canScore = 0;
-    int dia = 0;
+    int chur = 0;
 
 
     [Header("About Rat")]
@@ -238,9 +238,9 @@ public class MiniGame3Director : MonoBehaviour
                             GameOver_TEXT[1].text = string.Format("{0:#,0}", __canScore) + "°³";
                         }).SetUpdate(true);
 
-                this.dia = this.score == 4 ? 1 : 0;
+                this.chur = this.score == 4 ? 1 : 0;
                 int __dia = 0;
-                DOTween.To(() => __dia, x => __dia = x, this.dia, 0.2f).OnUpdate(() =>
+                DOTween.To(() => __dia, x => __dia = x, this.chur, 0.2f).OnUpdate(() =>
                         {
                             GameOver_TEXT[2].text = string.Format("{0:#,0}", __dia) + "°³";
                         }).SetUpdate(true);
@@ -256,7 +256,7 @@ public class MiniGame3Director : MonoBehaviour
 
         //SetDB
         PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);
-        PlayerPrefs.SetInt("dia", PlayerPrefs.GetInt("dia", 0) + this.dia);
+        PlayerPrefs.SetInt("chur", PlayerPrefs.GetInt("chur", 0) + this.chur);
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));
         // GameOver_TEXT[2].text = string.Format("{0:#,0}", _canScore);

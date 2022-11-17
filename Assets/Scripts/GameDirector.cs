@@ -7,8 +7,9 @@ using DG.Tweening;
 
 public class GameDirector : MonoBehaviour
 {
+    public bool isTutorial;
     public int catID;
-    public int stageLevel = 1;
+    public int stageLevel = 0; //0 and 1
     public int mod; // 0:GameOver, 1:NomalMod, 2:QuizMod, 3:QuizTalkingMod, 4:Teleporting
     public float score;
     //public const float baseSpeed = -2.5f;
@@ -28,6 +29,15 @@ public class GameDirector : MonoBehaviour
 
     void Awake()
     {
+        if (PlayerPrefs.HasKey("ID") && PlayerPrefs.HasKey("Auth"))
+        {
+            this.isTutorial = false;
+        }
+        else
+        {
+            this.isTutorial = true;
+        }
+
         this.PlayerController = GameObject.Find("Player").GetComponent<PlayerController>();
         this.ObjectDirector = GameObject.Find("ObjectDirector").GetComponent<ObjectDirector>();
         this.QuizDirector = GameObject.Find("QuizDirector").GetComponent<QuizDirector>();
@@ -62,7 +72,7 @@ public class GameDirector : MonoBehaviour
         }
 
         //if (this.ObjectDirector.cnt % 3 == 2)
-        if (this.ObjectDirector.cnt % 10 == 9)
+        if (this.ObjectDirector.cnt % 10 == 9 && !isTutorial)
         {
             this.ObjectDirector.cnt++;
             this.mod = 2;
@@ -85,8 +95,16 @@ public class GameDirector : MonoBehaviour
         .OnComplete(() =>
         {
             this.MainGameUIController.SetNormalMod();
-            //Debug.Log("Call!");
-            ObjectDirector.Init();
+            if (this.isTutorial)
+            {
+                Debug.Log("STRAT Tutorial");
+                //ObjectDirector.Init();
+            }
+            else
+            {
+                Debug.Log("STRAT!!!");
+                ObjectDirector.Init();
+            }
         });
     }
     public void StartNormalMod()
@@ -143,5 +161,12 @@ public class GameDirector : MonoBehaviour
         float _duration = PlayerController.GameOver();
         yield return new WaitForSeconds(_duration + 0.5f);
         MainGameUIController.GameOverWindowPopUp((int)Mathf.Ceil(this.score), PlayerController.canNumber, PlayerController.itemNumber);
+    }
+
+    //-----------------About Tutorial---------------
+    void TutorialScene1()
+    {
+        DOTween.Sequence()
+            .AppendInterval(2.0f);
     }
 }

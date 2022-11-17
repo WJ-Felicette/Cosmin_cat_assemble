@@ -182,13 +182,16 @@ public class PlayerController : MonoBehaviour
                 //DOTween.To(() => this.state, x => this.state = x, 0, 0.01f).SetDelay(0.4f);
             }
         }
-        if (this.hp > 0 && this.GameDirector.mod == 1 && this.state != 4)
+        if (!GameDirector.isTutorial)
         {
-            hp -= 2 * Time.deltaTime; //100 -> 1초에 2?�� 깎임.
-        }
-        else if (this.hp < 0)
-        {
-            this.GameDirector.StartGameOver();
+            if (this.hp > 0 && this.GameDirector.mod == 1 && this.state != 4)
+            {
+                hp -= 2 * Time.deltaTime; //100 -> 1초에 2?�� 깎임.
+            }
+            else if (this.hp < 0)
+            {
+                this.GameDirector.StartGameOver();
+            }
         }
     }
 

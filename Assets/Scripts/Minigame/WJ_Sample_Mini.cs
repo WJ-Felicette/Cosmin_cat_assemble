@@ -8,13 +8,11 @@ using TexDrawLib;
 
 public class WJ_Sample_Mini : MonoBehaviour
 {
-    public WJ_Conn scWJ_Conn;
-    public GameObject goPopup_Level_Choice;
-    public GameObject[] btAnsr = new GameObject[4];
-    public Text txState;
+    public WJ_Conn_Mini scWJ_Conn;
+    //public GameObject goPopup_Level_Choice;
+    public GameObject[] btAnsr = new GameObject[5];
 
-    protected TEXDraw[] txAnsr;
-    [SerializeField] GameObject result;
+    //protected TEXDraw[] txAnsr; // 건들지 말자
 
 
 
@@ -30,7 +28,7 @@ public class WJ_Sample_Mini : MonoBehaviour
 
     protected int nDigonstic_Idx;   // 진단평가 인덱스
 
-    protected WJ_Conn.Learning_Data cLearning;
+    protected WJ_Conn_Mini.Learning_Data cLearning;
     protected int nLearning_Idx;     // Learning 문제 인덱스
     protected string[] strQstCransr = new string[8];        // 사용자가 보기에서 선택한 답 내용
     protected long[] nQstDelayTime = new long[8];           // 풀이에 소요된 시간
@@ -38,9 +36,11 @@ public class WJ_Sample_Mini : MonoBehaviour
 
 
     ///////////////
-    GameDirector GameDirector;
-    QuizDirector QuizDirector;
-    [SerializeField] BossController BossController;
+    [SerializeField] MiniGame1Director MiniGame1Director;
+    [SerializeField] GameObject[] ratGOArr;
+    //GameDirector GameDirector;
+    //QuizDirector QuizDirector;
+    //[SerializeField] BossController BossController;
     //////////////
 
 
@@ -58,23 +58,23 @@ public class WJ_Sample_Mini : MonoBehaviour
             eState = STATE.DN_SET;
         }
 
-        goPopup_Level_Choice.active = false;
+        //goPopup_Level_Choice.active = false;
 
         cLearning = null;
         nLearning_Idx = 0;
 
-        txState.text = "상태 : 진단 평가 미수행";
 
-        txAnsr = new TEXDraw[btAnsr.Length];
-        for (int i = 0; i < btAnsr.Length; ++i)
-            txAnsr[i] = btAnsr[i].GetComponentInChildren<TEXDraw>();
+        // txAnsr = new TEXDraw[btAnsr.Length];
+        // for (int i = 0; i < btAnsr.Length; ++i)
+        //     txAnsr[i] = btAnsr[i].GetComponentInChildren<TEXDraw>();
 
         SetActive_Question(false);
         bRequest = false;
 
         /////////////////
-        this.GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        this.QuizDirector = GameObject.Find("QuizDirector").GetComponent<QuizDirector>();
+        //MiniGame1Director = GameObject.Find("MiniGame1Director").GetComponent<MiniGame1Director>();
+        //this.GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        //this.QuizDirector = GameObject.Find("QuizDirector").GetComponent<QuizDirector>();
     }
 
 
@@ -102,7 +102,7 @@ public class WJ_Sample_Mini : MonoBehaviour
         scWJ_Conn.OnRequest_DN_Setting(_nLevel);
 
         // 수준 선택 팝업 닫기
-        goPopup_Level_Choice.active = false;
+        //goPopup_Level_Choice.active = false;
 
         bRequest = true;
     }
@@ -119,13 +119,13 @@ public class WJ_Sample_Mini : MonoBehaviour
             case STATE.DN_PROG:
                 {
                     // 다음문제 출제
-                    DoDN_Prog(txAnsr[_nIndex].text);
+                    //DoDN_Prog(txAnsr[_nIndex].text);
                 }
                 break;
             case STATE.LEARNING:
                 {
                     // 선택한 정답을 저장함
-                    strQstCransr[nLearning_Idx - 1] = txAnsr[_nIndex].text;
+                    //strQstCransr[nLearning_Idx - 1] = txAnsr[_nIndex].text;
                     nQstDelayTime[nLearning_Idx - 1] = 5000;        // 임시값
                     // 다음문제 출제
                     DoLearning();
@@ -134,43 +134,9 @@ public class WJ_Sample_Mini : MonoBehaviour
         }
     }
 
-    //정답 오답 여부를 가려 이벤트 발생시키는 함수 (민석 제작)
-    protected void ReflectResult(int _nIndex)
-    {
-        switch (eState)
-        {
-            case STATE.DN_SET:
-            case STATE.DN_PROG:
-                {
-                    //Debug.Log(scWJ_Conn.cDiagnotics.data.qstCransr + " / " + txAnsr[_nIndex].text);
-                    if (scWJ_Conn.cDiagnotics.data.qstCransr.CompareTo(txAnsr[_nIndex].text) == 0)
-                    {
-                        QuizDirector.answerId = _nIndex;
-                        //result.GetComponentInChildren<TextMeshProUGUI>().text = "Correct!";
-                    }
-                }
-                break;
-            case STATE.LEARNING:
-                {
-                    // Debug.Log((nLearning_Idx - 1) + ":nLearning_Idx - 1 입니다.");
-                    // Debug.Log(scWJ_Conn.cLearning_Info.data.qsts[nLearning_Idx - 1].qstCransr + " / " + txAnsr[_nIndex].text);
-                    if (scWJ_Conn.cLearning_Info.data.qsts[nLearning_Idx - 1].qstCransr.CompareTo(txAnsr[_nIndex].text) == 0)
-                    {
-                        QuizDirector.answerId = _nIndex;
-                        //result.GetComponentInChildren<TextMeshProUGUI>().text = "Correct!";
-                    }
-                }
-                break;
-        }
-    }
-
-
-
-
-
     protected void DoDN_Start()
     {
-        goPopup_Level_Choice.active = true;
+        //goPopup_Level_Choice.active = true;
     }
 
 
@@ -208,7 +174,6 @@ public class WJ_Sample_Mini : MonoBehaviour
         {
             if (nLearning_Idx >= scWJ_Conn.cLearning_Info.data.qsts.Count)
             {
-                txState.text = "상태 : 학습 완료";
                 scWJ_Conn.OnLearningResult(cLearning, strQstCransr, nQstDelayTime);      // 학습 결과 처리
                 cLearning = null;
 
@@ -218,7 +183,6 @@ public class WJ_Sample_Mini : MonoBehaviour
 
             MakeQuestion(cLearning.qsts[nLearning_Idx].qstCn, cLearning.qsts[nLearning_Idx].qstCransr, cLearning.qsts[nLearning_Idx].qstWransr, cLearning.qsts[nLearning_Idx].qstCd);
 
-            txState.text = "상태 : 문제 학습 " + (nLearning_Idx + 1).ToString();
 
 
             ++nLearning_Idx;
@@ -246,8 +210,9 @@ public class WJ_Sample_Mini : MonoBehaviour
             _str = _str.Substring(0, _firstSquareIndex + 7);
             //Debug.Log("str: " + _str);
         }
-        BossController.nextText = _str;
-        QuizDirector.SetQuizTimeLimite(_qstCd);
+        //BossController.nextText = _str; 문제 저장하는 곳
+        this.MiniGame1Director.nextText = _str;
+        //QuizDirector.SetQuizTimeLimite(_qstCd);
         // string last = str.Substring(str.Length - 3, 3);
         // BossController.nextText
 
@@ -261,6 +226,18 @@ public class WJ_Sample_Mini : MonoBehaviour
         int nWrCount = tmWrAnswer.Length;
         if (nWrCount >= 5)       // 5지선다형 이상은 강제로 4지선다로 변경함
             nWrCount = 4;
+
+        for (int i = 0; i < 9; i++)
+        {
+            this.ratGOArr[i].GetComponent<RatController>().isActive = false;
+        }
+        int[] _arr = { 0, 1, 2, 3, 4, 5, 6, 7, 8 };
+        _arr = ShuffleArray(_arr);
+        for (int i = 0; i < 5; i++)
+        {
+            //Debug.Log(i + " / " + _arr[i]);
+            btAnsr[i] = this.ratGOArr[_arr[i]];
+        }
 
 
         int nAnsrCount = nWrCount + 1;       // 보기 갯수
@@ -280,19 +257,42 @@ public class WJ_Sample_Mini : MonoBehaviour
             if (i == nAnsridx)
             {
                 //Debug.Log("Set AnsIDX: " + i);
-                QuizDirector.answerId = i;
-                btAnsr[i].gameObject.GetComponent<ChoiceController>().nextText = strAnswer;
+                //QuizDirector.answerId = i; //정답 저장하는 부분
+                MiniGame1Director.answerId = i;
+                //Debug.Log(btAnsr[i]);
+                btAnsr[i].gameObject.GetComponent<RatController>().isActive = true;
+                btAnsr[i].gameObject.GetComponent<RatController>().id = i;
+                btAnsr[i].gameObject.GetComponent<RatController>().nextText = strAnswer;
                 //txAnsr[i].text = strAnswer;
                 --q;
             }
             else
             {
-                btAnsr[i].gameObject.GetComponent<ChoiceController>().nextText = tmWrAnswer[q];
+                btAnsr[i].gameObject.GetComponent<RatController>().isActive = true;
+                btAnsr[i].gameObject.GetComponent<RatController>().id = i;
+                btAnsr[i].gameObject.GetComponent<RatController>().nextText = tmWrAnswer[q];
                 //txAnsr[i].text = tmWrAnswer[q];
             }
         }
 
 
+    }
+    private T[] ShuffleArray<T>(T[] array)
+    {
+        int random1, random2;
+        T temp;
+
+        for (int i = 0; i < array.Length; ++i)
+        {
+            random1 = Random.Range(0, array.Length);
+            random2 = Random.Range(0, array.Length);
+
+            temp = array[random1];
+            array[random1] = array[random2];
+            array[random2] = temp;
+        }
+        //Debug.Log(array[0] + "/" + array[1] + "/" + array[2] + "/" + array[3] + "/" + array[4]);
+        return array;
     }
 
 
@@ -301,16 +301,17 @@ public class WJ_Sample_Mini : MonoBehaviour
     protected void SetActive_Question(bool _bActive)
     {
         //TEXDraw.text = "";
-        BossController.nextText = "";
-        for (int i = 0; i < btAnsr.Length; ++i)
-            btAnsr[i].gameObject.active = _bActive;
+        //BossController.nextText = "";
+        MiniGame1Director.nextText = "";
+        // for (int i = 0; i < btAnsr.Length; ++i)
+        //     btAnsr[i].gameObject.active = _bActive;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        if (this.GameDirector.mod == 2)
+        //if (this.GameDirector.mod == 2)
         {
             if (bRequest == true &&
            scWJ_Conn.CheckState_Request() == 1)
@@ -321,7 +322,7 @@ public class WJ_Sample_Mini : MonoBehaviour
                         {
                             MakeQuestion(scWJ_Conn.cDiagnotics.data.qstCn, scWJ_Conn.cDiagnotics.data.qstCransr, scWJ_Conn.cDiagnotics.data.qstWransr, scWJ_Conn.cDiagnotics.data.qstCd);
 
-                            txState.text = "상태 : 진단평가 " + (nDigonstic_Idx + 1).ToString();
+
                             ++nDigonstic_Idx;
 
                             eState = STATE.DN_PROG;
@@ -334,14 +335,14 @@ public class WJ_Sample_Mini : MonoBehaviour
                                 SetActive_Question(false);
 
                                 nDigonstic_Idx = 0;
-                                txState.text = "상태 : 진단평가 완료";
+
                                 eState = STATE.LEARNING;            // 진단 학습 완료
                             }
                             else
                             {
                                 MakeQuestion(scWJ_Conn.cDiagnotics.data.qstCn, scWJ_Conn.cDiagnotics.data.qstCransr, scWJ_Conn.cDiagnotics.data.qstWransr, scWJ_Conn.cDiagnotics.data.qstCd);
 
-                                txState.text = "상태 : 진단평가 " + (nDigonstic_Idx + 1).ToString();
+
                                 ++nDigonstic_Idx;
                             }
                         }
@@ -350,7 +351,7 @@ public class WJ_Sample_Mini : MonoBehaviour
                         {
                             cLearning = scWJ_Conn.cLearning_Info.data;
                             MakeQuestion(cLearning.qsts[nLearning_Idx].qstCn, cLearning.qsts[nLearning_Idx].qstCransr, cLearning.qsts[nLearning_Idx].qstWransr, cLearning.qsts[nLearning_Idx].qstCd);
-                            txState.text = "상태 : 문제 학습 " + (nLearning_Idx + 1).ToString();
+
 
                             ++nLearning_Idx;
                         }

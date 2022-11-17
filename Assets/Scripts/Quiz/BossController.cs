@@ -112,15 +112,15 @@ public class BossController : MonoBehaviour
                 aimGo.transform.DOMove(RandomPostion, 0.3f).SetEase(Ease.InOutCirc);
                 aimImg.transform.DOScale(Vector3.one * ((1f / 7f) * (8f - ran_Y)), 0.25f).SetEase(Ease.InOutCirc);
             })
-            .AppendInterval(0.4f)
-            .AppendCallback(() =>
-            {
-                ran_X = Random.Range(-200, 200) / 100.0f;
-                ran_Y = Random.Range(-100, 500) / 100.0f;
-                RandomPostion = new Vector3(ran_X, ran_Y, 0);
-                aimGo.transform.DOMove(RandomPostion, 0.3f).SetEase(Ease.InOutCirc);
-                aimImg.transform.DOScale(Vector3.one * ((1f / 7f) * (8f - ran_Y)), 0.25f).SetEase(Ease.InOutCirc);
-            })
+            // .AppendInterval(0.4f)
+            // .AppendCallback(() =>
+            // {
+            //     ran_X = Random.Range(-200, 200) / 100.0f;
+            //     ran_Y = Random.Range(-100, 500) / 100.0f;
+            //     RandomPostion = new Vector3(ran_X, ran_Y, 0);
+            //     aimGo.transform.DOMove(RandomPostion, 0.3f).SetEase(Ease.InOutCirc);
+            //     aimImg.transform.DOScale(Vector3.one * ((1f / 7f) * (8f - ran_Y)), 0.25f).SetEase(Ease.InOutCirc);
+            // })
             .AppendInterval(0.4f)
             .Append(aimGo.transform.DOMove(NewBossPostion, 0.3f).SetEase(Ease.InOutCirc))
             .Join(aimImg.transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.InOutCirc))

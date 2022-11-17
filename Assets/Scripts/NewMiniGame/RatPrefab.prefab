@@ -145,7 +145,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Alignment: {x: 0.5, y: 0.5}
-  m_Text: 2
+  m_Text: 
   m_Size: 350
   m_ScrollArea:
     serializedVersion: 2

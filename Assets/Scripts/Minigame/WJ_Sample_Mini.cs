@@ -36,7 +36,7 @@ public class WJ_Sample_Mini : MonoBehaviour
 
 
     ///////////////
-    [SerializeField] MiniGame1Director MiniGame1Director;
+    [SerializeField] MiniGame3Director MiniGame3Director;
     [SerializeField] GameObject[] ratGOArr;
     //GameDirector GameDirector;
     //QuizDirector QuizDirector;
@@ -211,7 +211,7 @@ public class WJ_Sample_Mini : MonoBehaviour
             //Debug.Log("str: " + _str);
         }
         //BossController.nextText = _str; 문제 저장하는 곳
-        this.MiniGame1Director.nextText = _str;
+        this.MiniGame3Director.nextText = _str;
         //QuizDirector.SetQuizTimeLimite(_qstCd);
         // string last = str.Substring(str.Length - 3, 3);
         // BossController.nextText
@@ -258,7 +258,7 @@ public class WJ_Sample_Mini : MonoBehaviour
             {
                 //Debug.Log("Set AnsIDX: " + i);
                 //QuizDirector.answerId = i; //정답 저장하는 부분
-                MiniGame1Director.answerId = i;
+                MiniGame3Director.answerId = i;
                 //Debug.Log(btAnsr[i]);
                 btAnsr[i].gameObject.GetComponent<RatController>().isActive = true;
                 btAnsr[i].gameObject.GetComponent<RatController>().id = i;
@@ -302,7 +302,7 @@ public class WJ_Sample_Mini : MonoBehaviour
     {
         //TEXDraw.text = "";
         //BossController.nextText = "";
-        MiniGame1Director.nextText = "";
+        //MiniGame1Director.nextText = "";
         // for (int i = 0; i < btAnsr.Length; ++i)
         //     btAnsr[i].gameObject.active = _bActive;
     }

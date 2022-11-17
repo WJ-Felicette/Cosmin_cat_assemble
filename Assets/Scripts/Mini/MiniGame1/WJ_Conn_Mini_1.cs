@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using DG.tweening;
 
-public class tween : MonoBehaviour
+public class WJ_Conn_Mini_1 : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
@@ -14,6 +13,6 @@ public class tween : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //transform.DMove(new Vector3.up());   
+        
     }
 }

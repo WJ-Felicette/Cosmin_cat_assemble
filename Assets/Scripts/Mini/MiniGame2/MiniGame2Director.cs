@@ -260,8 +260,10 @@ public class MiniGame2Director : MonoBehaviour
             .OnComplete(() =>
             {
                 Happy_BTN.interactable = true;
+                // DOTween.KillAll();
+                // DOTween.Clear(true);
             }).SetUpdate(true);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
 
         //SetDB
         PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);

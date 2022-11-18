@@ -31,6 +31,8 @@ public class SceneManager : MonoBehaviour
     // Start is called before the first frame update
     void Awake()
     {
+        DOTween.KillAll();
+        DOTween.Clear(true);
         Load();
         Debug.Log("Stanby Awake");
         this.isLoading = false;
@@ -127,13 +129,15 @@ public class SceneManager : MonoBehaviour
         BG.SetActive(true);
         BG.GetComponent<Image>().DOFade(1, 0.2f).SetUpdate(true);
         MiniGame_Window.SetActive(true);
+        PlayerPrefs.SetInt("Collectible_1", 30);
+        PlayerPrefs.SetInt("Collectible_2", 30);
+        PlayerPrefs.SetInt("Collectible_3", 30);
         this.C_number_Arr[0] = PlayerPrefs.GetInt("Collectible_1", 0);
         this.C_number_Arr[1] = PlayerPrefs.GetInt("Collectible_2", 0);
-        PlayerPrefs.SetInt("Collectible_3", 3);
         this.C_number_Arr[2] = PlayerPrefs.GetInt("Collectible_3", 0);
         for (int i = 0; i < 3; i++)
         {
-            this.C_Arr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.C_number_Arr[i].ToString() + "��";
+            this.C_Arr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.C_number_Arr[i].ToString() + "개";
             if (this.C_number_Arr[i] > 0)
             {
                 C_Arr[i].GetComponent<Button>().interactable = true;
@@ -150,8 +154,12 @@ public class SceneManager : MonoBehaviour
         switch (_id)
         {
             case 1:
+                PlayerPrefs.SetInt("Collectible_1", PlayerPrefs.GetInt("Collectible_1", 0) - 1);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("MiniGame1");
                 break;
             case 2:
+                PlayerPrefs.SetInt("Collectible_2", PlayerPrefs.GetInt("Collectible_2", 0) - 1);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("MiniGame2");
                 break;
             case 3:
                 PlayerPrefs.SetInt("Collectible_3", PlayerPrefs.GetInt("Collectible_3", 0) - 1);

@@ -212,6 +212,7 @@ public class MiniGame3Director : MonoBehaviour
 
     public void GameOverWindowPopUp()
     {
+
         Happy_BTN.interactable = false;
         foreach (TextMeshProUGUI TGUI in GameOver_TEXT)
         {
@@ -252,7 +253,7 @@ public class MiniGame3Director : MonoBehaviour
             {
                 Happy_BTN.interactable = true;
             }).SetUpdate(true);
-        Time.timeScale = 0;
+        //Time.timeScale = 0;
 
         //SetDB
         PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);

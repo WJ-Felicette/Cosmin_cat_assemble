@@ -7,10 +7,10 @@ using TexDrawLib;
 using TMPro;
 using MoreMountains.Feedbacks;
 
-public class MiniGame1Director : MonoBehaviour
+public class MiniGame2Director : MonoBehaviour
 {
     [Header("About Default")]
-    [SerializeField] WJ_Sample_Mini_1 WJ_Sample_Mini;
+    [SerializeField] WJ_Sample_Mini_2 WJ_Sample_Mini;
     public int state = 0; //0:sleep, 1:init, 2:playing, 3:Setting
     public int round = 0;
     public int answerId = 6;
@@ -22,15 +22,14 @@ public class MiniGame1Director : MonoBehaviour
     int canScore = 0;
     int chur = 0;
 
+    ///--------------About Lock-------------------
+    [SerializeField] GameObject LockGO;
+
     ///--------------About Pause-------------------
-    [Header("About Dial And Handle")]
+    [Header("About Button")]
+    [SerializeField] GameObject[] AButtonGOArr;
     [SerializeField] GameObject[] ATextGOArr;
     public string[] ATextNextTextArr = { "", "", "", "", "" };
-    [SerializeField] GameObject Dial;
-    [SerializeField] Transform DialTarget;
-    [SerializeField] GameObject Handle;
-    [SerializeField] Transform HandleTarget;
-    [SerializeField] MMFeedbacks DialoundFeedback;
     int dailID = 0;
 
     ///--------------About Pause-------------------
@@ -71,12 +70,9 @@ public class MiniGame1Director : MonoBehaviour
         Pause_CatHead.sprite = catHeadArr[PlayerPrefs.GetInt("selectedCatID", 0)];
         this.round = 0;
         this.defaultHeadPos = Head.transform.position;
-        this.Dial.GetComponent<Button>().interactable = false;
-        this.Handle.GetComponent<Button>().interactable = false;
         for (int i = 0; i < 5; i++)
         {
-            int _d = 130;
-            this.ATextGOArr[i].GetComponent<RectTransform>().localPosition = new Vector3(_d * Mathf.Cos((2 * Mathf.PI / 5) * i + Mathf.PI / 2), _d * Mathf.Sin((2 * Mathf.PI / 5) * i + Mathf.PI / 2), 0);
+            this.AButtonGOArr[i].GetComponent<Button>().interactable = false;
         }
         WJ_Sample_Mini.OnClick_MakeQuestion();
         DOTween.Sequence()
@@ -97,42 +93,27 @@ public class MiniGame1Director : MonoBehaviour
                 StartCoroutine(this.NextQuiz());
             });
     }
-    public void OnClickDial()
+    public void OnClickButton(int _id)
     {
-        this.Dial.GetComponent<Button>().interactable = false;
-        int _side = Random.Range(0, 2);
+        for (int i = 0; i < 5; i++)
+        {
+            this.AButtonGOArr[i].GetComponent<Button>().interactable = false;
+        }
+        int _side = _id > 2 ? 1 : 0;
         int _rotateSide = _side == 0 ? -1 : 1;
-        this.dailID = this.dailID + 1 > 4 ? 0 : this.dailID + 1;
-        DialoundFeedback?.PlayFeedbacks();
         DOTween.Sequence()
-            .Append(handArr[_side].transform.DOMove(this.DialTarget.position, 0.1f).SetEase(Ease.InCubic))
+            .Append(handArr[_side].transform.DOMove(this.AButtonGOArr[_id].transform.position, 0.1f).SetEase(Ease.InCubic))
             .Join(handArr[_side].transform.DORotate(Vector3.forward * 35f * _rotateSide, 0.1f).SetEase(Ease.InCubic))
-            .Append(this.Dial.transform.DORotate(Vector3.forward * this.dailID * 72f, 0.15f))
-            .Append(handArr[_side].GetComponent<RectTransform>().DOAnchorPos(new Vector3(275f * _rotateSide, -1250f, 0f), 0.2f).SetEase(Ease.InSine))
-            .Join(handArr[_side].transform.DORotate(Vector3.zero, 0.2f).SetEase(Ease.InSine))
+            .Join(AButtonGOArr[_id].transform.DOScale(Vector3.one * 0.6f, 0.15f).SetDelay(0.03f))
             .AppendCallback(() =>
             {
-                this.Dial.GetComponent<Button>().interactable = true;
-            });
-    }
-    public void OnClickHandle()
-    {
-        this.state = 3;
-        this.Dial.GetComponent<Button>().interactable = false;
-        this.Handle.GetComponent<Button>().interactable = false;
-
-        DOTween.Sequence()
-            .Append(handArr[1].transform.DOMove(this.HandleTarget.position, 0.15f).SetEase(Ease.InCubic))
-            .Join(handArr[1].transform.DORotate(Vector3.forward * 35f, 0.15f).SetEase(Ease.InCubic))
-            .Append(Handle.transform.DORotate(Vector3.forward * -26f, 0.15f).SetEase(Ease.InCubic))
-            .AppendCallback(() =>
-            {
+                LockGO.transform.DOShakeRotation(1f, 2.0f, 5).SetDelay(0.03f);
                 QuizTXT.text = "";
                 for (int i = 0; i < 5; i++)
                 {
                     this.ATextGOArr[i].transform.DOScale(Vector3.zero, 0.2f);
                 }
-                if (this.dailID == this.answerId)
+                if (_id == this.answerId)
                 {
                     this.resultArr[this.round] = 1;
                     this.score++;
@@ -167,12 +148,11 @@ public class MiniGame1Director : MonoBehaviour
                 }
                 _s.Substring(0, _s.Length - 2);
                 RoundTXT.text = _s;
-                WJ_Sample_Mini.Select_Ansr(this.dailID);
+                WJ_Sample_Mini.Select_Ansr(_id);
             })
-            .AppendInterval(0.2f)
-            .Append(handArr[1].GetComponent<RectTransform>().DOAnchorPos(new Vector3(275f, -1250f, 0f), 0.3f).SetEase(Ease.InSine))
-            .Join(handArr[1].transform.DORotate(Vector3.zero, 0.3f).SetEase(Ease.InSine))
-            .Join(Handle.transform.DORotate(Vector3.zero, 0.3f).SetEase(Ease.InCubic))
+            .Append(handArr[_side].GetComponent<RectTransform>().DOAnchorPos(new Vector3(275f * _rotateSide, -1250f, 0f), 0.2f).SetEase(Ease.InSine))
+            .Join(handArr[_side].transform.DORotate(Vector3.zero, 0.2f).SetEase(Ease.InSine))
+            .Join(AButtonGOArr[_id].transform.DOScale(Vector3.one * 0.53f, 0.2f))
             .AppendCallback(() =>
             {
                 CorrectTXT.text = "";
@@ -200,11 +180,11 @@ public class MiniGame1Director : MonoBehaviour
             this.ATextGOArr[i].GetComponent<TEXDraw>().text = this.ATextNextTextArr[i];
             this.ATextGOArr[i].transform.DOScale(Vector3.one, 0.2f);
         }
-        this.Dial.transform.DORotate(Vector3.zero, 0.2f);
-        this.Dial.GetComponent<Button>().interactable = true;
-        this.Handle.GetComponent<Button>().interactable = true;
+        for (int i = 0; i < 5; i++)
+        {
+            this.AButtonGOArr[i].GetComponent<Button>().interactable = true;
+        }
         this.state = 2;
-        this.dailID = 0;
         yield return new WaitForSeconds(0.2f);
     }
 

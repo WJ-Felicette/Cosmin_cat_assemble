@@ -66,7 +66,7 @@ public class MiniGame3Director : MonoBehaviour
         this.defaultHeadPos = Head.transform.position;
         WJ_Sample_Mini.OnClick_MakeQuestion();
         DOTween.Sequence()
-            .AppendInterval(1.0f)
+            .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
                 CountDownIMG.enabled = true;

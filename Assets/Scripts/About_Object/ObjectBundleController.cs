@@ -35,7 +35,7 @@ public class ObjectBundleController : MonoBehaviour
             if (this.state == 1 && this.transform.position.y < 5.0f)
             {
                 this.state = 2;
-                if (this.GameDirector.mod == 1)
+                if (this.GameDirector.mod == 1 && ObjectDirector.stopState == 0)
                 {
                     this.ObjectDirector.NextBundleStart();
                 }
@@ -50,6 +50,10 @@ public class ObjectBundleController : MonoBehaviour
                 {
                     //Debug.Log(this.id + " " + this.ObjectDirector.prevBundleId);
                     this.GameDirector.StartCoroutine(this.GameDirector.StartQuizMod());
+                }
+                else if (this.id == this.ObjectDirector.prevBundleId && ObjectDirector.stopState == 1)
+                {
+                    ObjectDirector.stopState = 2;
                 }
                 this.Kill();
                 //this.Init();

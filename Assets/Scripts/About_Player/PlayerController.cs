@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     QuizDirector QuizDirector;
     [SerializeField] BoosterGauge BoosterGauge;
     public float hp; //max = 100
-    public int state; //0:justFlying, 1:Boosting 2: BoostStoping 3:talking, 4:무적;
+    public int state = 0; //0:justFlying, 1:Boosting 2: BoostStoping 3:talking, 4:무적;
     int idx; //고양?��?�� ?��?�� ?���?, 0~4까�??
     int lastIdx; //고양?���? 직전?�� ?��?�� ?���?
     float boostTimer; //?��?�� �??��?�� �??�� ?��간을 기록
@@ -51,6 +51,7 @@ public class PlayerController : MonoBehaviour
         //Debug.Log(this.SpriteRenderer);
         this.rigd2D = gameObject.GetComponent<Rigidbody2D>();
         this.SetSwingbySystem();
+        this.state = 0;
 
     }
     void Start()
@@ -125,6 +126,10 @@ public class PlayerController : MonoBehaviour
                 //�??��?�� ?��?�� ?��?��?��?�� else if
                 else if (this.deltaMousePos.magnitude > 1.5f && this.deltaMousePos.y > 0 && this.state != 2 && this.state != 4)
                 {
+                    if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 7)
+                    {
+                        GameDirector.boostCnt++;
+                    }
                     if (this.BoosterGauge.boostLevel > 0 || this.GameDirector.mod == 2)
                     {
                         if (this.BoosterGauge.boostLevel == 3)
@@ -248,7 +253,10 @@ public class PlayerController : MonoBehaviour
             //그게 ?��?���? 고양?���? ?��미�?? 받음
             else if (this.state != 4)
             {
-                this.hp -= 5.0f;
+                if (!GameDirector.isTutorial)
+                {
+                    this.hp -= 5.0f;
+                }
                 StartCoroutine(SetInvincible());
                 this.SpriteRenderer.transform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0), 20);
                 this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15);
@@ -296,6 +304,13 @@ public class PlayerController : MonoBehaviour
     }
     public void Swingby()
     {
+        // Debug.Log("isTutorial: " + this.GameDirector.isTutorial);
+        // Debug.Log("tutorialStep: " + this.GameDirector.tutorialStep);
+        if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 5)
+        {
+            GameDirector.swingbyCnt++;
+            Debug.Log("swingbyCnt: " + GameDirector.swingbyCnt);
+        }
         FlameDirector.Swingby();
         BoostVFXController.SwingbyBoost();
         DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.speed * 1.4f, 0.3f).SetEase(Ease.OutExpo);

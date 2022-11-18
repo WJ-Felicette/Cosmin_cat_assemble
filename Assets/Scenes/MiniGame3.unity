@@ -2711,7 +2711,7 @@ MonoBehaviour:
     right: 2
     top: 2
     bottom: 2
-  m_Overflow: 0
+  m_Overflow: 5
 --- !u!222 &1210317298
 CanvasRenderer:
   m_ObjectHideFlags: 0

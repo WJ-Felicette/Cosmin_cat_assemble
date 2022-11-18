@@ -11,6 +11,7 @@ public class ObjectDirector : MonoBehaviour
     int nextBundleId;
     int prevCanIdx;
     public int cnt = 0;
+    public int stopState = 0; //0:NotCall, 1:StopShotBunddle, 2:LastBundleDie
     ObjectBundleController[] objectBundleControllerArr = new ObjectBundleController[7];
     [SerializeField] GameObject ObjectBundlePrefabs;
     [SerializeField] CanController CanPrefab;
@@ -29,9 +30,6 @@ public class ObjectDirector : MonoBehaviour
     }
     void Start()
     {
-    }
-    public void Init()
-    {
         this.nextBundleId = 0;
         this.prevCanIdx = 2;
         for (int i = 0; i < 7; i++)
@@ -42,7 +40,6 @@ public class ObjectDirector : MonoBehaviour
             this.objectBundleControllerArr[i].id = i;
             this.objectBundleControllerArr[i].gameObject.SetActive(false);
         }
-        this.NextBundleStart();
     }
     void Update()
     {
@@ -50,11 +47,11 @@ public class ObjectDirector : MonoBehaviour
     }
     public void NextBundleStart()
     {
-        //Debug.Log("Call : " + this.nextBundleId);
-        // Debug.Log("cnt: " + this.cnt);
+        Debug.Log("Call : " + this.nextBundleId);
+        Debug.Log("cnt: " + this.cnt);
+        //Debug.Log("cat state: " + this.PlayerController.state);
         if (this.PlayerController.state == 0)
         {
-            //Debug.Log("cnt: " + this.cnt);
             this.cnt++;
         }
         this.objectBundleControllerArr[this.nextBundleId].gameObject.SetActive(true);
@@ -62,6 +59,18 @@ public class ObjectDirector : MonoBehaviour
         this.prevCanIdx = objectBundleControllerArr[this.nextBundleId].lastCanIdx;
         this.prevBundleId = this.nextBundleId;
         this.nextBundleId = (this.nextBundleId + 1) % 7;
+    }
+
+    public void Stop()
+    {
+        IEnumerator _Stop()
+        {
+            yield return new WaitUntil(() => this.stopState == 2);
+            GameDirector.tutorialStep++;
+            this.stopState = 0;
+        }
+        this.stopState = 1;
+        StartCoroutine(_Stop());
     }
 
     //-----------------About Can Pool----------------

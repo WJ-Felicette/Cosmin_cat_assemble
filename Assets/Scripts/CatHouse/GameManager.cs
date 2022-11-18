@@ -36,7 +36,9 @@ public class GameManager : MonoBehaviour
     public GameObject[] catList;
 
     private int gold;
+    int chur;
     public TMP_Text goldText;
+    public TMP_Text churText;
 
 
 
@@ -53,6 +55,7 @@ public class GameManager : MonoBehaviour
 
     private void LateUpdate() {
         goldText.text = string.Format("{0:n0}", gold);
+        churText.text = string.Format("{0:n0}", chur);
     }
 
 
@@ -117,6 +120,7 @@ public class GameManager : MonoBehaviour
 
     void Load(){
         gold = PlayerPrefs.GetInt("gold", 99999);
+        chur = PlayerPrefs.GetInt("chur", 100);
         isCatUnlock[0] = PlayerPrefs.GetInt("newton", 0) == 1 ? true : false;
         isCatUnlock[1] = PlayerPrefs.GetInt("eins", 0) == 1 ? true : false;
         currentLv[0] = PlayerPrefs.GetInt("currentWheelLv", 0);
@@ -134,6 +138,7 @@ public class GameManager : MonoBehaviour
 
     void Save(){
         PlayerPrefs.SetInt("gold", gold);
+        PlayerPrefs.SetInt("chur", chur);
         PlayerPrefs.SetInt("newton", isCatUnlock[0] ? 1 : 0);
         PlayerPrefs.SetInt("eins", isCatUnlock[1] ? 1 : 0);
         PlayerPrefs.SetInt("currentWheelLv", currentLv[0]);

@@ -8,8 +8,10 @@ using TMPro;
 public class ShopManager : MonoBehaviour
 {
     public TMP_Text goldText;
+    public TMP_Text churText;
     public Button[] lockedImg;
     private int gold;
+    int chur;
     
     public int[] skillPriceArr = new int[4];
     public static int[] skillLv = new int[2]{0, 0};
@@ -42,6 +44,7 @@ public class ShopManager : MonoBehaviour
     }
      private void LateUpdate() {
         goldText.text = string.Format("{0:n0}", gold);
+        churText.text = string.Format("{0:n0}", chur);
     }
 
     void ShopSetting(int code){
@@ -97,6 +100,22 @@ public class ShopManager : MonoBehaviour
         Save();
     }
 
+    public void NewtonUnlock(){
+        if(chur < 20) return;
+        chur -= 20;
+        GameManager.isCatUnlock[0] = true;
+        ShopSetting(0);
+        Save();
+    }
+
+    public void EinsUnlock(){
+        if(chur < 50) return;
+        chur -= 50;
+        GameManager.isCatUnlock[1] = true;
+        ShopSetting(1);
+        Save();
+    }
+
     public void NewtonTextSetting(){
         if(skillLv[0] >= 2) {
             priceBtn[0].gameObject.SetActive(false);
@@ -117,6 +136,7 @@ public class ShopManager : MonoBehaviour
 
     void Load(){
         gold = PlayerPrefs.GetInt("gold", 99999);
+        chur = PlayerPrefs.GetInt("chur", 100);
         GameManager.isCatUnlock[0] = PlayerPrefs.GetInt("newton", 0) == 1 ? true : false;
         GameManager.isCatUnlock[1] = PlayerPrefs.GetInt("eins", 0) == 1 ? true : false;
         skillLv[0] = PlayerPrefs.GetInt("newtonLv", 0);
@@ -125,6 +145,7 @@ public class ShopManager : MonoBehaviour
 
     void Save(){
         PlayerPrefs.SetInt("gold", gold);
+        PlayerPrefs.SetInt("chur", chur);
         PlayerPrefs.SetInt("newton", GameManager.isCatUnlock[0] ? 1 : 0);
         PlayerPrefs.SetInt("eins", GameManager.isCatUnlock[1] ? 1 : 0);
         PlayerPrefs.SetInt("newtonLv", skillLv[0]);

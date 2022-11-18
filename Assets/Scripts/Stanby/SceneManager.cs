@@ -14,6 +14,8 @@ public class SceneManager : MonoBehaviour
     bool _isAimationDone;
     CatsController CatsController;
     public TMP_Text goldText;
+    public TMP_Text churText;
+    int chur;
     int gold;
 
     ///--------------About MiniGame-------------------
@@ -40,6 +42,7 @@ public class SceneManager : MonoBehaviour
     private void LateUpdate()
     {
         goldText.text = string.Format("{0:n0}", gold);
+        churText.text = string.Format("{0:n0}", chur);
     }
 
     public void ToCatHouse()
@@ -98,6 +101,7 @@ public class SceneManager : MonoBehaviour
     void Load()
     {
         gold = PlayerPrefs.GetInt("gold", 0);
+        chur = PlayerPrefs.GetInt("chur", 0);
     }
     // IEnumerator LoadMainGame()
     // {
@@ -129,7 +133,7 @@ public class SceneManager : MonoBehaviour
         this.C_number_Arr[2] = PlayerPrefs.GetInt("Collectible_3", 0);
         for (int i = 0; i < 3; i++)
         {
-            this.C_Arr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.C_number_Arr[i].ToString() + "°³";
+            this.C_Arr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.C_number_Arr[i].ToString() + "ï¿½ï¿½";
             if (this.C_number_Arr[i] > 0)
             {
                 C_Arr[i].GetComponent<Button>().interactable = true;

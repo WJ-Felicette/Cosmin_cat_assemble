@@ -258,6 +258,7 @@ public class MiniGame3Director : MonoBehaviour
         //SetDB
         PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);
         PlayerPrefs.SetInt("chur", PlayerPrefs.GetInt("chur", 0) + this.chur);
+        PlayerPrefs.Save();
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));
         // GameOver_TEXT[2].text = string.Format("{0:#,0}", _canScore);

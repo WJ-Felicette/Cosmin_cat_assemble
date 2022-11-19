@@ -27,7 +27,7 @@ public class ObjectBundleController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //Debug.Log(this.state);
         if (this.state == 1 || this.state == 2)
@@ -59,7 +59,8 @@ public class ObjectBundleController : MonoBehaviour
                 //this.Init();
             }
             //this.Rigidbody2D.velocity = new Vector2(0, this.GameDirector.speed);
-            this.transform.Translate(new Vector3(0, this.GameDirector.speed * Time.deltaTime, 0));
+            //this.transform.Translate(new Vector3(0, this.GameDirector.speed * Time.deltaTime, 0));
+            this.transform.position += Vector3.up * this.GameDirector.speed * Time.deltaTime;
 
             //Debug.Log("speed : " + this.ObjectDirector.speed * Time.deltaTime);
         }
@@ -104,7 +105,7 @@ public class ObjectBundleController : MonoBehaviour
                     this.objectList.Add(_obs);
                     x += oId - 1;
                 }
-                else if (this.objectArrBlueprint[y, x] / 100 == 3)
+                else if (!GameDirector.isTutorial && this.objectArrBlueprint[y, x] / 100 == 3)
                 {
                     var _item = ObjectDirector._itemPool.Get();
                     _item.Init(new Vector3(x * this.objectWidth - 1.8f, -y * this.objectHeight, 0), this.objectArrBlueprint[y, x], this.transform, this.id);

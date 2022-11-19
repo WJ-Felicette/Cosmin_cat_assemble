@@ -56,11 +56,20 @@ public class BossController : MonoBehaviour
         {
             // Debug.Log(PlayerPrefs.GetInt("currentScratcherLv", 0) + "??");
             // Debug.Log(hpArr[(GameDirector.stageLevel - 1), PlayerPrefs.GetInt("currentScratcherLv", 0)] + "???");
-            this.maxHp = this.hp = hpArr[(GameDirector.stageLevel - 1), PlayerPrefs.GetInt("currentScratcherLv", 2)];
-            this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5];
+            if (GameDirector.isTutorial)
+            {
+                this.maxHp = this.hp = 8;
+                GameDirector.TutorialText.text = "모의 전투\n0 / 8";
+                this.SpriteRenderer.sprite = this.BossImg[3 * 5];
+            }
+            else
+            {
+                this.maxHp = this.hp = hpArr[(GameDirector.stageLevel - 1), PlayerPrefs.GetInt("currentScratcherLv", 2)];
+                this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5];
+            }
             isFirstTime = false;
             hpBar.fillAmount = 1;
-            hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * 100);
+            hpText.text = string.Format("{0:#,0}", this.maxHp * 100);
         }
         QuizTXT.text = "";
         this.transform.position = new Vector3(6.0f, 0, 0);
@@ -138,14 +147,17 @@ public class BossController : MonoBehaviour
         QuizTXT.text = "";
         this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15).SetDelay(0.3f).OnComplete(() =>
         {
-            this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5 + (((this.maxHp - this.hp) * 4) / this.maxHp)];
-            this.PutOutCan(_prizeValue);
+            if (!GameDirector.isTutorial)
+            {
+                this.SpriteRenderer.sprite = this.BossImg[(GameDirector.stageLevel - 1) * 5 + (((this.maxHp - this.hp) * 4) / this.maxHp)];
+                this.PutOutCan(_prizeValue);
+            }
         });
         aimImg.GetComponentInChildren<Image>().DOFade(0, 0.5f).SetDelay(0.3f);
         DOTween.To(() => aimBoardImg.fillAmount, x => aimBoardImg.fillAmount = x, 0, 0.2f).SetDelay(0.3f);
         DOTween.To(() => hpBar.fillAmount, x => hpBar.fillAmount = x, (1.0f * this.hp) / this.maxHp, 0.4f).SetDelay(0.4f).OnComplete(() =>
         {
-            hpText.text = string.Format("{0:#,0}", hpArr[(GameDirector.stageLevel - 1), 0] * (this.hp * 100 / this.maxHp));
+            hpText.text = string.Format("{0:#,0}", this.hp * 100);
         });
     }
     public void WrongAns()

@@ -141,13 +141,13 @@ public class MainGameUIController : MonoBehaviour
                 int __canScore = 0;
                 DOTween.To(() => __canScore, x => __canScore = x, _canScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "ê°œ";
+                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "ê°?";
                         }).SetUpdate(true);
 
                 int __collectibleScore = 0;
                 DOTween.To(() => __collectibleScore, x => __collectibleScore = x, _collectibleScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "ê°œ";
+                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "ê°?";
                         }).SetUpdate(true);
             })
             .SetUpdate(true);
@@ -166,6 +166,7 @@ public class MainGameUIController : MonoBehaviour
         {
             PlayerPrefs.SetInt("highScore", _myScore);
         }
+        PlayerPrefs.Save();
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));
         // GameOver_TEXT[2].text = string.Format("{0:#,0}", _canScore);

@@ -100,11 +100,19 @@ public class BGDirector : MonoBehaviour
         tpCover.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         foreach (GameObject go in tpGoArr)
         {
+            if (GameDirector.isTutorial)
+            {
+                go.GetComponent<BGScroller>().SetLevel(1);
+            }
             go.SetActive(true);
             go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         }
         foreach (GameObject go in tpLRGoArr)
         {
+            if (GameDirector.isTutorial)
+            {
+                go.GetComponent<BGScroller>().SetLevel(1);
+            }
             go.SetActive(true);
             go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
         }
@@ -116,25 +124,32 @@ public class BGDirector : MonoBehaviour
             .AppendInterval(2.0f)
             .AppendCallback(() =>
             {
-                GameDirector.SetStage(GameDirector.stageLevel + 1);
-
-                this.hole.transform.position = new Vector3(0, 7f, 0);
-                this.hole.transform.localScale = Vector3.one;
-
-                BGSpriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-                Star_down_Renderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-                foreach (GameObject go in scrollerGoArr)
+                if (GameDirector.isTutorial)
                 {
-                    go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    this.GameDirector.tutorialStep++;
                 }
-                tpCover.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-                foreach (GameObject go in tpGoArr)
+                else
                 {
-                    go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-                }
-                foreach (GameObject go in tpLRGoArr)
-                {
-                    go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                    GameDirector.SetStage(GameDirector.stageLevel + 1);
+
+                    this.hole.transform.position = new Vector3(0, 7f, 0);
+                    this.hole.transform.localScale = Vector3.one;
+
+                    BGSpriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    Star_down_Renderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    foreach (GameObject go in scrollerGoArr)
+                    {
+                        go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
+                    }
+                    tpCover.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                    foreach (GameObject go in tpGoArr)
+                    {
+                        go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                    }
+                    foreach (GameObject go in tpLRGoArr)
+                    {
+                        go.GetComponent<SpriteRenderer>().maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
+                    }
                 }
             })
             .Append(this.hole.transform.DOMoveY(-4f, 2.5f).SetEase(Ease.Linear))

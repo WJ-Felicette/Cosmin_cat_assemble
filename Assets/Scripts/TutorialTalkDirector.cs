@@ -14,6 +14,9 @@ public class TutorialTalkDirector : MonoBehaviour
     string[] bossScript = new string[10];
     string[] playerScript = { "야옹!", "냥냥~!", "냐오옹!!", "그르릉", "냥", "미야옹", "미야우~", "웨엥~!" };
 
+    string[] selectLevelplayerScript = { "숫자", "더하기", "곱하기", "분수" };
+    bool isSelectTime = false;
+
     //QuizDirector QuizDirector;
     GameDirector GameDirector;
     MainGameUIController MainGameUIController;
@@ -115,19 +118,24 @@ public class TutorialTalkDirector : MonoBehaviour
         {
             if (this.talkCnt < this.limitTalkCnt)
             {
-                int[] _arr = { 0, 1, 2, 3, 4, 5, 6, 7 };
-                _arr = ShuffleArray(_arr);
-                for (int i = 0; i < 4; i++)
+                if (isSelectTime && this.talkCnt == 2)
                 {
-                    TalkArr[i].GetComponent<Button>().interactable = true;
-                    TalkArr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.playerScript[_arr[i]];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        TalkArr[i].GetComponent<Button>().interactable = true;
+                        TalkArr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.selectLevelplayerScript[i];
+                    }
                 }
-                // foreach (GameObject talk in this.TalkArr)
-                // {
-                //     int id = Random.Range(0, 8);
-                //     talk.GetComponent<Button>().interactable = true;
-                //     talk.GetComponentInChildren<TextMeshProUGUI>().text = this.playerScript[id];
-                // }
+                else
+                {
+                    int[] _arr = { 0, 1, 2, 3, 4, 5, 6, 7 };
+                    _arr = ShuffleArray(_arr);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        TalkArr[i].GetComponent<Button>().interactable = true;
+                        TalkArr[i].GetComponentInChildren<TextMeshProUGUI>().text = this.playerScript[_arr[i]];
+                    }
+                }
             }
             else if (this.talkCnt == this.limitTalkCnt)
             {
@@ -176,6 +184,13 @@ public class TutorialTalkDirector : MonoBehaviour
             }
             this.state = 3;
             this.PlayerTalk(id);
+            if (isSelectTime && this.talkCnt == 2)
+            {
+                for (int i = 0; i < 4; i++)
+                {
+                    GameDirector.tutorialQuizLevel = id;
+                }
+            }
         }
     }
     private T[] ShuffleArray<T>(T[] array)
@@ -198,33 +213,49 @@ public class TutorialTalkDirector : MonoBehaviour
 
     public void TStep3()
     {
-        this.limitTalkCnt = 2;
-        this.bossScript[0] = "안녕!\n나는 WJ-002야!";
-        this.bossScript[1] = "통조림을 찾으러\n모험을 시작해보자!";
-        this.bossScript[2] = "클릭으로\n우주 장애물을\n피해봐!";
+        this.limitTalkCnt = 4;
+        this.bossScript[0] = "WJ-002\n";
+        this.bossScript[1] = "통조림\n회수작전을 위한\n훈련 시작";
+        this.isSelectTime = true;
+        this.bossScript[2] = "훈련 난이도를\n설정합니다"; //보류
+        this.bossScript[3] = "입력 완료";
+        this.bossScript[4] = "장애물 회피\n훈련 시작";
         Boss_img.GetComponent<Image>().sprite = Boss_img_arr[0];
         this.Init();
     }
     public void TStep5()
     {
-        this.limitTalkCnt = 1;
-        this.bossScript[0] = "처음치고는\n잘하는걸~";
-        this.bossScript[1] = "장애물을\n아슬아슬하게\n피하면 Swingby를\n할 수 있어!";
+        this.isSelectTime = false;
+        this.limitTalkCnt = 2;
+        this.bossScript[0] = "테스트 통과...\n등급: A";
+        this.bossScript[1] = "장애물을\n아슬아슬하게 피하면\nSwingby를\n할 수 있습니다";
+        this.bossScript[2] = "Swingby 성공 시\n추가 부스터 에너지\n얻을 수 있습니다";
         this.Init();
     }
 
     public void TStep7()
     {
-        this.limitTalkCnt = 1;
-        this.bossScript[0] = "Swingby로\n부스터 에너지를\n모을 수 있어";
-        this.bossScript[1] = "화면을 위로 밀어서\n부스터를 사용해봐!";
+        this.limitTalkCnt = 2;
+        this.bossScript[0] = "테스트 통과...\n등급: S";
+        this.bossScript[1] = "부스터 에너지가\n충분히 모였습니다";
+        this.bossScript[2] = "화면을 위로\n슬라이드하여\n부스터 사용 가능합니다";
         this.Init();
     }
     public void TStep9()
     {
-        this.limitTalkCnt = 1;
-        this.bossScript[0] = "Swingby로\n부스터 에너지를\n모을 수 있어";
-        this.bossScript[1] = "화면을 위로 밀어서\n부스터를 사용해봐!";
+        this.limitTalkCnt = 2;
+        this.bossScript[0] = "테스트 통과...\n등급: S";
+        this.bossScript[1] = "모의 전투\n시뮬레이션 시작";
+        this.bossScript[2] = "해적쥐들의 암호화된\n좌표를 계산하여\n쥐덫을 던지십시오";
+        this.Init();
+    }
+
+    public void TStep12()
+    {
+        this.limitTalkCnt = 2;
+        this.bossScript[0] = "모의 전투\n시뮬레이션 승리";
+        this.bossScript[1] = "훈련 종료";
+        this.bossScript[2] = "본부로 돌아갑니다";
         this.Init();
     }
 }

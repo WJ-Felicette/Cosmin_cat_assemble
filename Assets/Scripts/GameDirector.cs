@@ -12,16 +12,22 @@ public class GameDirector : MonoBehaviour
     public int tutorialStep;
     public int swingbyCnt;
     public int boostCnt;
+    public int boostBreakCnt;
     TutorialTalkDirector TutorialTalkDirector;
+    public TextMeshProUGUI TutorialText;
+    public int tutorialQuizLevel;
+    [SerializeField] GameObject PauseBtn;
+    [SerializeField] GameObject LastSceneBG;
+    [SerializeField] GameObject LastSceneLogo;
     //---------------------------------------------
     public int catID;
     public int stageLevel = 0; //0 and 1
     public int mod; // 0:GameOver, 1:NomalMod, 2:QuizMod, 3:QuizTalkingMod, 4:Teleporting, 5:Tutorial
     public float score;
     //public const float baseSpeed = -2.5f;
-    public float defaultSpeed;
-    public float speed = -3.0f;
-    int[] quizModCycleArr = { 10, 15, 25 };
+    public float defaultSpeed = -2.5f;
+    public float speed;
+    int[] quizModCycleArr = { 10, 10, 15, 25 };
     int quizModCycle;
     PlayerController PlayerController;
     ObjectDirector ObjectDirector;
@@ -33,10 +39,11 @@ public class GameDirector : MonoBehaviour
     [SerializeField] MainGameUIController MainGameUIController;
 
     [SerializeField] TextMeshProUGUI stageTXT;
-    string[] stageNameArr = { "포탈", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주쥐 본부" };
+    string[] stageNameArr = { "", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주쥐 본부" };
 
     void Awake()
     {
+        Application.targetFrameRate = 60;
         if (PlayerPrefs.HasKey("ID") && PlayerPrefs.HasKey("Auth"))
         {
             this.isTutorial = false;
@@ -65,22 +72,23 @@ public class GameDirector : MonoBehaviour
     {
         this.mod = 1;
         this.score = 0;
-        this.defaultSpeed = this.speed;
+        this.speed = this.defaultSpeed;
+        this.catID = PlayerPrefs.GetInt("selectedCatID", 0);
         this.InitScene();
 
 
         //DB빋이오기
-        this.catID = PlayerPrefs.GetInt("selectedCatID", 0);
     }
 
     void InitScene()
     {
+        //if (true)
         if (this.isTutorial)
         {
             Debug.Log("STRAT Tutorial");
 
-            Debug.Log(TutorialTalkDirector);
             tutorialStep = 0;
+            PauseBtn.SetActive(false);
             StartCoroutine(this.TutorialStart());
             //ObjectDirector.Init();
         }
@@ -107,8 +115,8 @@ public class GameDirector : MonoBehaviour
             StartCoroutine(this.EndGame());
         }
 
-        //if (this.ObjectDirector.cnt % 3 == 2)
-        if (!isTutorial && this.ObjectDirector.cnt % quizModCycle == quizModCycle - 1)
+        if (this.ObjectDirector.cnt % 3 == 2)
+        //if (!isTutorial && this.ObjectDirector.cnt % quizModCycle == quizModCycle - 1)
         {
             this.ObjectDirector.cnt++;
             this.mod = 2;
@@ -145,6 +153,7 @@ public class GameDirector : MonoBehaviour
     public void SetStage(int _level)
     {
         _level = _level > 3 ? 1 : _level;
+        Debug.Log("Level: " + _level);
         this.quizModCycle = this.quizModCycleArr[_level];
 
         this.stageLevel = _level;
@@ -216,13 +225,33 @@ public class GameDirector : MonoBehaviour
         this.Tstep7();
         yield return new WaitWhile(() => tutorialStep < 7);
 
-        Debug.Log("Step 8 Start!");
+        Debug.Log("Step 8Start!");
         StartCoroutine(this.Tstep8());
         yield return new WaitWhile(() => tutorialStep < 8);
 
         Debug.Log("Step 9 Start!");
         this.Tstep9();
         yield return new WaitWhile(() => tutorialStep < 9);
+
+        Debug.Log("Step 10 Start!");
+        this.Tstep10();
+        yield return new WaitWhile(() => tutorialStep < 10);
+
+        Debug.Log("Step 11 Start!");
+        this.Tstep11();
+        yield return new WaitWhile(() => tutorialStep < 11);
+
+        Debug.Log("Step 12 Start!");
+        this.Tstep12();
+        yield return new WaitWhile(() => tutorialStep < 12);
+
+        Debug.Log("Step 13 Start!");
+        this.Tstep13();
+        yield return new WaitWhile(() => tutorialStep < 13);
+
+        Debug.Log("Step 14 Start!");
+        this.Tstep14();
+        yield return new WaitWhile(() => tutorialStep < 14);
     }
 
     void TStep1()
@@ -244,7 +273,8 @@ public class GameDirector : MonoBehaviour
         // PlayerPrefs.SetInt("Collectible_2", 0);
         // PlayerPrefs.SetInt("Collectible_3", 0);
         // PlayerPrefs.SetInt("chur", 0);
-
+        TutorialText.gameObject.SetActive(true);
+        ScoreUI.gameObject.SetActive(false);
         this.tutorialStep++;
     }
     void TStep2()
@@ -253,7 +283,7 @@ public class GameDirector : MonoBehaviour
 
         this.stageLevel = 1;
         this.quizModCycle = 3;
-        this.BGDirector.SetLevel(this.stageLevel);
+        this.BGDirector.SetLevel(1);
 
         this.stageTXT.text = "";
         this.stageTXT.enabled = true;
@@ -262,7 +292,7 @@ public class GameDirector : MonoBehaviour
             .AppendCallback(() =>
             {
                 string text = "";
-                DOTween.To(() => text, x => text = x, this.stageNameArr[1], 2.0f).OnUpdate(() =>
+                DOTween.To(() => text, x => text = x, "고양이 행성\n시뮬레이션 룸", 2.0f).OnUpdate(() =>
                 {
                     this.stageTXT.text = text;
                 });
@@ -281,7 +311,8 @@ public class GameDirector : MonoBehaviour
     }
     IEnumerator Tstep4()
     {
-        this.MainGameUIController.SetNormalMod();
+        TutorialText.text = "장애물 피하기";
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(-120f, 0.2f).SetEase(Ease.InOutSine);
         this.mod = 1;
         ObjectDirector.NextBundleStart();
         yield return new WaitUntil(() => ObjectDirector.cnt == 3);
@@ -289,11 +320,14 @@ public class GameDirector : MonoBehaviour
     }
     void Tstep5()
     {
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(120f, 0.2f).SetEase(Ease.InOutSine);
         TutorialTalkDirector.TStep5();
     }
     IEnumerator Tstep6()
     {
-        this.MainGameUIController.SetNormalMod();
+        TutorialText.text = "아슬아슬 Swingby\n0 / 5";
+        MainGameUIController.SetNormalMod();
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(-120f, 0.2f).SetEase(Ease.InOutSine);
         this.mod = 1;
         swingbyCnt = 0;
         ObjectDirector.NextBundleStart();
@@ -302,19 +336,62 @@ public class GameDirector : MonoBehaviour
     }
     void Tstep7()
     {
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(120f, 0.2f).SetEase(Ease.InOutSine);
         TutorialTalkDirector.TStep7();
     }
     IEnumerator Tstep8()
     {
-        this.MainGameUIController.SetNormalMod();
+        PlayerController.BoosterGauge.boostLevel = 3;
+        TutorialText.text = "신나는 부스터\n0 / 3";
+        MainGameUIController.SetNormalMod();
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(-120f, 0.2f).SetEase(Ease.InOutSine);
         this.mod = 1;
         boostCnt = 0;
         ObjectDirector.NextBundleStart();
         yield return new WaitUntil(() => boostCnt == 3);
+        yield return new WaitForSeconds(0.5f);
+        PlayerController.BoosterGauge.boostLevel = 3;
+        TutorialText.text = "부스터로 장애물 파괴\n0 / 3";
+        boostBreakCnt = 0;
+        yield return new WaitUntil(() => boostBreakCnt == 3);
         ObjectDirector.Stop();
     }
     void Tstep9()
     {
+        TutorialText.GetComponent<RectTransform>().DOAnchorPosY(120f, 0.2f).SetEase(Ease.InOutSine);
         TutorialTalkDirector.TStep9();
+    }
+
+    void Tstep10()
+    {
+        this.QuizDirector.BossWaringMove();
+        this.BoosterGauge.SetQuizMod();
+        this.MainGameUIController.SetQuizMod();
+    }
+    void Tstep11()
+    {
+        QuizDirector.InitInTutorial();
+    }
+    void Tstep12()
+    {
+        TutorialTalkDirector.TStep12();
+    }
+
+    void Tstep13()
+    {
+        BGDirector.Teleportation();
+    }
+    void Tstep14()
+    {
+        LastSceneBG.SetActive(true);
+        LastSceneLogo.SetActive(true);
+        DOTween.Sequence()
+            .Append(LastSceneBG.GetComponent<Image>().DOColor(new Color(0, 0, 0, 1), 0.5f))
+            .Append(LastSceneLogo.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack).SetDelay(0.5f))
+            .AppendInterval(3.5f)
+            .AppendCallback(() =>
+            {
+                MainGameUIController.OnClickHappy();
+            });
     }
 }

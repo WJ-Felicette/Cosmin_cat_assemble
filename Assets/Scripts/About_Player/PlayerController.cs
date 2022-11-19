@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour
 {
     GameDirector GameDirector;
     QuizDirector QuizDirector;
-    [SerializeField] BoosterGauge BoosterGauge;
+    public BoosterGauge BoosterGauge;
     public float hp; //max = 100
     public int state = 0; //0:justFlying, 1:Boosting 2: BoostStoping 3:talking, 4:무적;
     int idx; //고양?��?�� ?��?�� ?���?, 0~4까�??
@@ -29,12 +29,12 @@ public class PlayerController : MonoBehaviour
     Vector3 deltaMousePos = Vector3.zero;
     Rigidbody2D rigd2D;
     SpriteRenderer SpriteRenderer;
-    [SerializeField] MMFeedbacks DamagedFb;
     [SerializeField] CinemachineVirtualCamera vcam;
     [SerializeField] FlameDirector FlameDirector;
     [SerializeField] BoostVFXController BoostVFXController;
 
     [SerializeField] SwingbyText SwingbyTextPrefab;
+    float swingbyForce = 1.5f;
     private IObjectPool<SwingbyText> swingbyPool;
 
     [SerializeField] Sprite[] catImgArr;
@@ -126,9 +126,10 @@ public class PlayerController : MonoBehaviour
                 //�??��?�� ?��?�� ?��?��?��?�� else if
                 else if (this.deltaMousePos.magnitude > 1.5f && this.deltaMousePos.y > 0 && this.state != 2 && this.state != 4)
                 {
-                    if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 7)
+                    if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 7 && this.GameDirector.boostCnt < 3)
                     {
                         GameDirector.boostCnt++;
+                        GameDirector.TutorialText.text = "신나는 부스터\n" + GameDirector.boostCnt + " / 3";
                     }
                     if (this.BoosterGauge.boostLevel > 0 || this.GameDirector.mod == 2)
                     {
@@ -246,7 +247,12 @@ public class PlayerController : MonoBehaviour
             //�??��?�� 중일 ?��?�� ?��괴함
             if (this.state == 1 || this.state == 2)
             {
-                this.DamagedFb?.PlayFeedbacks();
+                if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 7 && this.GameDirector.boostCnt == 3 && this.GameDirector.boostBreakCnt < 3)
+                {
+                    GameDirector.boostBreakCnt++;
+                    GameDirector.TutorialText.text = "부스터로 장애물 파괴\n" + GameDirector.boostBreakCnt + " / 3";
+                    //Debug.Log("swingbyCnt: " + GameDirector.swingbyCnt);
+                }
                 objController.KillByCat();
             }
 
@@ -306,14 +312,15 @@ public class PlayerController : MonoBehaviour
     {
         // Debug.Log("isTutorial: " + this.GameDirector.isTutorial);
         // Debug.Log("tutorialStep: " + this.GameDirector.tutorialStep);
-        if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 5)
+        if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 5 && this.GameDirector.swingbyCnt < 5)
         {
             GameDirector.swingbyCnt++;
-            Debug.Log("swingbyCnt: " + GameDirector.swingbyCnt);
+            GameDirector.TutorialText.text = "아슬아슬 Swingby\n" + GameDirector.swingbyCnt + " / 5";
+            //Debug.Log("swingbyCnt: " + GameDirector.swingbyCnt);
         }
         FlameDirector.Swingby();
         BoostVFXController.SwingbyBoost();
-        DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.speed * 1.4f, 0.3f).SetEase(Ease.OutExpo);
+        DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.defaultSpeed * this.swingbyForce, 0.2f).SetEase(Ease.OutExpo);
         // DOTween.To(() => this.GameDirector.defaultSpeed, x => this.GameDirector.defaultSpeed = x, this.GameDirector.defaultSpeed * 1.1f, 0.2f).SetEase(Ease.OutExpo);
         DOTween.To(() => this.GameDirector.speed, x => this.GameDirector.speed = x, this.GameDirector.defaultSpeed, 0.2f).SetEase(Ease.Linear).SetDelay(0.3f);
         this.BoosterGauge.currentValue += 20;

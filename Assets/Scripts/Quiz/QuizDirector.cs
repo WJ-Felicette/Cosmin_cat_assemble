@@ -49,6 +49,18 @@ public class QuizDirector : MonoBehaviour
             this.quizCounter = 0;
         }
     }
+    public void InitInTutorial()
+    {
+        this.state = 1;
+        this.round = 8;
+        GameDirector.mod = 3;
+        //GameObject newBoss = Instantiate(this.BossPrefab, new Vector3(6.0f, 0, 0), Quaternion.identity);
+        this.BossController.Init();
+        //this.TalkDirector.Init();
+        PrizeBundleController.gameObject.SetActive(true);
+        WJ_Sample.OnClick_Level(GameDirector.tutorialQuizLevel);
+        this.StopTalk();
+    }
     void Update()
     {
         if (this.state == 2)
@@ -118,7 +130,11 @@ public class QuizDirector : MonoBehaviour
         }
         else
         {
-            if (BossController.hp > 0)
+            if (GameDirector.isTutorial)
+            {
+                StartCoroutine(EndTutorialQuizMod());
+            }
+            else if (BossController.hp > 0)
             {
                 StartCoroutine(this.EndQuizModTemporary());
             }
@@ -132,8 +148,9 @@ public class QuizDirector : MonoBehaviour
 
     IEnumerator NextQuiz()
     {
+        GameDirector.TutorialText.text = "모의 전투\n" + (8 - this.round) + " / 8";
         this.KillChoices();
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
         float BossDuration = this.BossController.Next();
         yield return new WaitForSeconds(BossDuration + 0.5f);
         for (int i = 0; i < 5; i++)
@@ -173,6 +190,20 @@ public class QuizDirector : MonoBehaviour
         //this.PlayerController.GetQuizBoost();
 
     }
+
+    IEnumerator EndTutorialQuizMod()
+    {
+        GameDirector.mod = 4;
+        this.state = 0;
+        this.BossController.Die();
+        yield return new WaitForSeconds(1.0f);
+        this.KillChoices();
+        PrizeBundleController.Init();
+        yield return new WaitForSeconds(2.0f);
+        GameDirector.tutorialStep++;
+        //this.PlayerController.GetQuizBoost();
+
+    }
     void KillChoices()
     {
         for (int i = 0; i < 5; i++)
@@ -186,7 +217,14 @@ public class QuizDirector : MonoBehaviour
 
     public void BossWaringMove()
     {
-        BossWarning.GetComponent<SpriteRenderer>().sprite = BossWarningImg[GameDirector.stageLevel];
+        if (GameDirector.isTutorial)
+        {
+            BossWarning.GetComponent<SpriteRenderer>().sprite = BossWarningImg[4];
+        }
+        else
+        {
+            BossWarning.GetComponent<SpriteRenderer>().sprite = BossWarningImg[GameDirector.stageLevel];
+        }
         BossWarning.transform.position = new Vector3(-2.2f, -8.0f, 0.0f);
 
         const float duration = 1.5f, delay = 2.0f;
@@ -196,7 +234,12 @@ public class QuizDirector : MonoBehaviour
         BossWarning.transform.DOMoveY(0.5f, delay / 2).SetEase(Ease.InOutElastic).SetLoops(2, LoopType.Yoyo).SetDelay(duration);
         //ossWarning.transform.DOShakeRotation(delay, 30.0f, 15).SetDelay(duration);
         BossWarning.transform.DOMoveY(6.0f, duration).SetDelay(duration + delay);
-        BossWarning.transform.DOMoveX(4.0f, duration).SetDelay(duration + delay).SetEase(Ease.InOutSine);
+        BossWarning.transform.DOMoveX(4.0f, duration).SetDelay(duration + delay).SetEase(Ease.InOutSine)
+            .OnComplete(() =>
+            {
+                if (GameDirector.isTutorial)
+                    GameDirector.tutorialStep++;
+            });
     }
     public void SetQuizTimeLimite(string _code)
     {

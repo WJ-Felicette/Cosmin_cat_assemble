@@ -134,6 +134,7 @@ public class InitController : MonoBehaviour
             .AppendCallback(() =>
             {
                 this.state = true;
+                this.CutCnt++;
                 UnityEngine.SceneManagement.SceneManager.LoadScene("MainGame");
             });
     }

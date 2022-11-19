@@ -47,8 +47,8 @@ public class ObjectDirector : MonoBehaviour
     }
     public void NextBundleStart()
     {
-        Debug.Log("Call : " + this.nextBundleId);
-        Debug.Log("cnt: " + this.cnt);
+        // Debug.Log("Call : " + this.nextBundleId);
+        // Debug.Log("cnt: " + this.cnt);
         //Debug.Log("cat state: " + this.PlayerController.state);
         if (this.PlayerController.state == 0)
         {

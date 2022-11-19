@@ -84,6 +84,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                if (Input.touchCount > 0)
+                {
+                    if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                        return;
+                }
                 this.dMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             }
             //Debug.Log("Clicked!!!");
@@ -92,6 +97,11 @@ public class PlayerController : MonoBehaviour
         {
             if (!EventSystem.current.IsPointerOverGameObject())
             {
+                if (Input.touchCount > 0)
+                {
+                    if (EventSystem.current.IsPointerOverGameObject(Input.GetTouch(0).fingerId))
+                        return;
+                }
                 this.uMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 this.deltaMousePos = this.uMousePos - this.dMousePos;
 

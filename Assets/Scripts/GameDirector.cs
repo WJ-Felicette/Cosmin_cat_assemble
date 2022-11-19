@@ -115,8 +115,8 @@ public class GameDirector : MonoBehaviour
             StartCoroutine(this.EndGame());
         }
 
-        if (this.ObjectDirector.cnt % 3 == 2)
-        //if (!isTutorial && this.ObjectDirector.cnt % quizModCycle == quizModCycle - 1)
+        //if (!isTutorial && this.ObjectDirector.cnt % 3 == 2)
+        if (!isTutorial && this.ObjectDirector.cnt % quizModCycle == quizModCycle - 1)
         {
             this.ObjectDirector.cnt++;
             this.mod = 2;
@@ -195,61 +195,61 @@ public class GameDirector : MonoBehaviour
     IEnumerator TutorialStart()
     {
         //Setp 1
-        Debug.Log("Step 1 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.TStep1();
         yield return new WaitWhile(() => tutorialStep < 1);
 
         //Step 2
-        Debug.Log("Step 2 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.TStep2();
         yield return new WaitWhile(() => tutorialStep < 2);
 
         //Step 3
-        Debug.Log("Step 3 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep3();
         yield return new WaitWhile(() => tutorialStep < 3);
 
-        Debug.Log("Step 4 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         StartCoroutine(this.Tstep4());
         yield return new WaitWhile(() => tutorialStep < 4);
 
-        Debug.Log("Step 5 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep5();
         yield return new WaitWhile(() => tutorialStep < 5);
 
-        Debug.Log("Step 6 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         StartCoroutine(this.Tstep6());
         yield return new WaitWhile(() => tutorialStep < 6);
 
-        Debug.Log("Step 7 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep7();
         yield return new WaitWhile(() => tutorialStep < 7);
 
-        Debug.Log("Step 8Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         StartCoroutine(this.Tstep8());
         yield return new WaitWhile(() => tutorialStep < 8);
 
-        Debug.Log("Step 9 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep9();
         yield return new WaitWhile(() => tutorialStep < 9);
 
-        Debug.Log("Step 10 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep10();
         yield return new WaitWhile(() => tutorialStep < 10);
 
-        Debug.Log("Step 11 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep11();
         yield return new WaitWhile(() => tutorialStep < 11);
 
-        Debug.Log("Step 12 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep12();
         yield return new WaitWhile(() => tutorialStep < 12);
 
-        Debug.Log("Step 13 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep13();
         yield return new WaitWhile(() => tutorialStep < 13);
 
-        Debug.Log("Step 14 Start!");
+        Debug.Log("Step " + (tutorialStep + 1) + " Start!");
         this.Tstep14();
         yield return new WaitWhile(() => tutorialStep < 14);
     }
@@ -257,22 +257,24 @@ public class GameDirector : MonoBehaviour
     void TStep1()
     {
         //ID, Auth = NULL
-        // PlayerPrefs.SetInt("gold", 0);
-        // PlayerPrefs.SetInt("newton", 0);
-        // PlayerPrefs.SetInt("eins", 0);
-        // PlayerPrefs.SetInt("selectedCatID", 0);
-        // PlayerPrefs.SetInt("newtonLv", 0);
-        // PlayerPrefs.SetInt("einsLv", 0);
+        PlayerPrefs.SetInt("isTutorialDone", 0);
+        PlayerPrefs.SetInt("gold", 0);
+        PlayerPrefs.SetInt("newton", 0);
+        PlayerPrefs.SetInt("eins", 0);
+        PlayerPrefs.SetInt("selectedCatID", 0);
+        PlayerPrefs.SetInt("newtonLv", 0);
+        PlayerPrefs.SetInt("einsLv", 0);
         PlayerPrefs.SetInt("currentWheelLv", 0);
         PlayerPrefs.SetInt("currentScratcherLv", 0);
         PlayerPrefs.SetInt("currentTowerLv", 0);
         PlayerPrefs.SetInt("currentShelfLv", 0);
         PlayerPrefs.SetInt("currentRoomLv", 0);
-        // PlayerPrefs.SetInt("highScore", 0);
-        // PlayerPrefs.SetInt("Collectible_1", 0);
-        // PlayerPrefs.SetInt("Collectible_2", 0);
-        // PlayerPrefs.SetInt("Collectible_3", 0);
-        // PlayerPrefs.SetInt("chur", 0);
+        PlayerPrefs.SetInt("highScore", 0);
+        PlayerPrefs.SetInt("Collectible_1", 0);
+        PlayerPrefs.SetInt("Collectible_2", 0);
+        PlayerPrefs.SetInt("Collectible_3", 0);
+        PlayerPrefs.SetInt("chur", 0);
+        PlayerPrefs.Save();
         TutorialText.gameObject.SetActive(true);
         ScoreUI.gameObject.SetActive(false);
         this.tutorialStep++;

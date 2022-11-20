@@ -14,8 +14,9 @@ public class InitController : MonoBehaviour
     [SerializeField] GameObject Logo;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
+        Application.targetFrameRate = 60;
         if (PlayerPrefs.HasKey("ID") && PlayerPrefs.HasKey("Auth"))
         {
             DOTween.Sequence()

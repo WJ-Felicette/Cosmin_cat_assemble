@@ -9,6 +9,8 @@ using MoreMountains.Feedbacks;
 
 public class MiniGame3Director : MonoBehaviour
 {
+    [SerializeField] MMFeedbacks[] Sound;
+    //----------------About Tutorial---------------
     [Header("About Default")]
     [SerializeField] WJ_Sample_Mini WJ_Sample_Mini;
     public int state = 0; //0:sleep, 1:init, 2:playing, 3:Setting
@@ -61,6 +63,7 @@ public class MiniGame3Director : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Sound[0]?.PlayFeedbacks();
         this.score = 0;
         Pause_CatHead.sprite = catHeadArr[PlayerPrefs.GetInt("selectedCatID", 0)];
         this.round = 0;
@@ -214,6 +217,18 @@ public class MiniGame3Director : MonoBehaviour
 
     public void GameOverWindowPopUp()
     {
+        this.canScore = this.score * 30;
+        this.chur = this.score == 3 ? 1 : 0;
+        int _i = PlayerPrefs.GetInt("gold", 0);
+        int _j = PlayerPrefs.GetInt("chur", 0);
+        PlayerPrefs.SetInt("gold", _i + this.canScore);
+        PlayerPrefs.SetInt("chur", _j + this.chur);
+        Debug.Log(_i);
+        Debug.Log(PlayerPrefs.GetInt("gold", 0));
+
+        PlayerPrefs.SetInt("goalValue" + 1, PlayerPrefs.GetInt("goalValue" + 1, 0) + this.score);
+        PlayerPrefs.SetInt("goalValue" + 4, PlayerPrefs.GetInt("goalValue" + 4, 0) + 1);
+        PlayerPrefs.Save();
 
         Happy_BTN.interactable = false;
         foreach (TextMeshProUGUI TGUI in GameOver_TEXT)
@@ -234,14 +249,13 @@ public class MiniGame3Director : MonoBehaviour
             {
                 GameOver_TEXT[0].text = "3문제 중 " + this.score + "문제 정답!";
 
-                this.canScore = this.score * 30;
+                //this.canScore = this.score * 30;
                 int __canScore = 0;
                 DOTween.To(() => __canScore, x => __canScore = x, this.canScore, 0.2f).OnUpdate(() =>
                         {
                             GameOver_TEXT[1].text = string.Format("{0:#,0}", __canScore) + "개";
                         }).SetUpdate(true);
 
-                this.chur = this.score == 3 ? 1 : 0;
                 int __dia = 0;
                 DOTween.To(() => __dia, x => __dia = x, this.chur, 0.2f).OnUpdate(() =>
                         {
@@ -253,18 +267,27 @@ public class MiniGame3Director : MonoBehaviour
             .AppendInterval(1.5f)
             .OnComplete(() =>
             {
+                // int _i = PlayerPrefs.GetInt("gold", 0);
+                // int _j = PlayerPrefs.GetInt("chur", 0);
+                // PlayerPrefs.SetInt("gold", _i + this.canScore);
+                // PlayerPrefs.SetInt("chur", _j + this.chur);
+                // Debug.Log(_i);
+                // Debug.Log(PlayerPrefs.GetInt("gold", 0));
+
+                // PlayerPrefs.SetInt("goalValue" + 1, PlayerPrefs.GetInt("goalValue" + 1, 0) + this.score);
+                // PlayerPrefs.SetInt("goalValue" + 4, PlayerPrefs.GetInt("goalValue" + 4, 0) + 1);
+                // PlayerPrefs.Save();
                 Happy_BTN.interactable = true;
             }).SetUpdate(true);
         //Time.timeScale = 0;
-
         //SetDB
-        PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);
-        PlayerPrefs.SetInt("chur", PlayerPrefs.GetInt("chur", 0) + this.chur);
+        // PlayerPrefs.SetInt("gold", PlayerPrefs.GetInt("gold", 0) + this.canScore);
+        // PlayerPrefs.SetInt("chur", PlayerPrefs.GetInt("chur", 0) + this.chur);
 
-        PlayerPrefs.SetInt("goalValue" + 1, PlayerPrefs.GetInt("goalValue" + 1, 0) + this.score);
-        PlayerPrefs.SetInt("goalValue" + 4, PlayerPrefs.GetInt("goalValue" + 4, 0) + 1);
-        PlayerPrefs.Save();
-        PlayerPrefs.Save();
+        // PlayerPrefs.SetInt("goalValue" + 1, PlayerPrefs.GetInt("goalValue" + 1, 0) + this.score);
+        // PlayerPrefs.SetInt("goalValue" + 4, PlayerPrefs.GetInt("goalValue" + 4, 0) + 1);
+        // PlayerPrefs.Save();
+        // PlayerPrefs.Save();
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));
         // GameOver_TEXT[2].text = string.Format("{0:#,0}", _canScore);

@@ -42,6 +42,7 @@ public class ItemController : ObjectController
                 PlayerPrefs.SetInt("collectible_3", PlayerPrefs.GetInt("collectible_3", 0) + 1);
                 break;
         }
+        PlayerPrefs.Save();
 
         base.KillByCat();
         _itemPool.Release(this);

@@ -12,50 +12,60 @@ public class ShopManager : MonoBehaviour
     public Button[] lockedImg;
     private int gold;
     int chur;
-    
+
     public int[] skillPriceArr = new int[4];
-    public static int[] skillLv = new int[2]{0, 0};
+    public static int[] skillLv = new int[2] { 0, 0 };
 
 
     public GameObject[] windowImg;
     public TMP_Text[] skillText;
     public TMP_Text[] priceText;
     public Button[] priceBtn;
-    
 
-    void Awake(){
+
+    void Awake()
+    {
         Load();
         ShopSetting(0);
         ShopSetting(1);
         NewtonTextSetting();
         EinsTextSetting();
     }
-    public void ToCatRoom(){
+    public void ToCatRoom()
+    {
         UnityEngine.SceneManagement.SceneManager.LoadScene("CatHouseScene");
     }
-    void Update() {
+    void Update()
+    {
         if (Application.platform == RuntimePlatform.Android)
         {
-            if(Input.GetKey(KeyCode.Escape)){
+            if (Input.GetKey(KeyCode.Escape))
+            {
                 UnityEngine.SceneManagement.SceneManager.LoadScene("MainScene");
                 Debug.Log("메인으로");
             }
         }
     }
-     private void LateUpdate() {
+    private void LateUpdate()
+    {
         goldText.text = string.Format("{0:n0}", gold);
         churText.text = string.Format("{0:n0}", chur);
     }
 
-    void ShopSetting(int code){
-        if(GameManager.isCatUnlock[code]){
+    void ShopSetting(int code)
+    {
+        if (GameManager.isCatUnlock[code])
+        {
             lockedImg[code].gameObject.SetActive(false);
-        }else{
+        }
+        else
+        {
             lockedImg[code].gameObject.SetActive(true);
         }
     }
 
-    public void FelClicked(){
+    public void FelClicked()
+    {
         windowImg[0].gameObject.SetActive(true);
         windowImg[1].gameObject.SetActive(false);
         windowImg[2].gameObject.SetActive(false);
@@ -64,7 +74,8 @@ public class ShopManager : MonoBehaviour
         windowImg[5].gameObject.SetActive(false);
     }
 
-    public void NewtonClicked(){
+    public void NewtonClicked()
+    {
         windowImg[0].gameObject.SetActive(false);
         windowImg[1].gameObject.SetActive(true);
         windowImg[2].gameObject.SetActive(false);
@@ -73,7 +84,8 @@ public class ShopManager : MonoBehaviour
         windowImg[5].gameObject.SetActive(false);
     }
 
-    public void EinsClicked(){
+    public void EinsClicked()
+    {
         windowImg[0].gameObject.SetActive(false);
         windowImg[1].gameObject.SetActive(false);
         windowImg[2].gameObject.SetActive(true);
@@ -82,8 +94,9 @@ public class ShopManager : MonoBehaviour
         windowImg[5].gameObject.SetActive(true);
     }
 
-    public void NewtonUpgrade(){
-        if(gold < skillPriceArr[skillLv[0]] || GameManager.currentLv[4] < skillLv[0] + 2) return;
+    public void NewtonUpgrade()
+    {
+        if (gold < skillPriceArr[skillLv[0]] || GameManager.currentLv[4] < skillLv[0] + 2) return;
         Debug.Log(GameManager.currentLv[4]);
         Debug.Log(skillLv[0]);
         gold -= skillPriceArr[skillLv[0]];
@@ -92,49 +105,61 @@ public class ShopManager : MonoBehaviour
         Save();
     }
 
-    public void EinsUpgrade(){
-        if(gold < skillPriceArr[skillLv[1]] || GameManager.currentLv[4] < skillLv[1] + 2) return;
+    public void EinsUpgrade()
+    {
+        if (gold < skillPriceArr[skillLv[1]] || GameManager.currentLv[4] < skillLv[1] + 2) return;
         gold -= skillPriceArr[skillLv[1]];
         skillLv[1]++;
         EinsTextSetting();
         Save();
     }
 
-    public void NewtonUnlock(){
-        if(chur < 20) return;
+    public void NewtonUnlock()
+    {
+        if (chur < 20) return;
         chur -= 20;
         GameManager.isCatUnlock[0] = true;
         ShopSetting(0);
         Save();
     }
 
-    public void EinsUnlock(){
-        if(chur < 50) return;
+    public void EinsUnlock()
+    {
+        if (chur < 50) return;
         chur -= 50;
         GameManager.isCatUnlock[1] = true;
         ShopSetting(1);
         Save();
     }
 
-    public void NewtonTextSetting(){
-        if(skillLv[0] >= 2) {
+    public void NewtonTextSetting()
+    {
+        if (skillLv[0] >= 2)
+        {
             priceBtn[0].gameObject.SetActive(false);
-        }else{
+        }
+        else
+        {
             priceText[0].SetText(string.Format("{0:n0}", skillPriceArr[skillLv[0]]));
         }
         skillText[0].SetText("[스킬] 만유인력 LV." + (skillLv[0] + 1));
     }
 
-    public void EinsTextSetting(){
-        if(skillLv[1] >= 2) {
+    public void EinsTextSetting()
+    {
+        if (skillLv[1] >= 2)
+        {
             priceBtn[1].gameObject.SetActive(false);
-        }else{
+        }
+        else
+        {
             priceText[1].SetText(string.Format("{0:n0}", skillPriceArr[skillLv[1]]));
         }
         skillText[1].SetText("[스킬] 상대성이론 LV." + (skillLv[1] + 1));
     }
 
-    void Load(){
+    void Load()
+    {
         gold = PlayerPrefs.GetInt("gold", 99999);
         chur = PlayerPrefs.GetInt("chur", 100);
         GameManager.isCatUnlock[0] = PlayerPrefs.GetInt("newton", 0) == 1 ? true : false;
@@ -143,12 +168,14 @@ public class ShopManager : MonoBehaviour
         skillLv[1] = PlayerPrefs.GetInt("einsLv", 0);
     }
 
-    void Save(){
+    void Save()
+    {
         PlayerPrefs.SetInt("gold", gold);
         PlayerPrefs.SetInt("chur", chur);
         PlayerPrefs.SetInt("newton", GameManager.isCatUnlock[0] ? 1 : 0);
         PlayerPrefs.SetInt("eins", GameManager.isCatUnlock[1] ? 1 : 0);
         PlayerPrefs.SetInt("newtonLv", skillLv[0]);
         PlayerPrefs.SetInt("einsLv", skillLv[1]);
+        PlayerPrefs.Save();
     }
 }

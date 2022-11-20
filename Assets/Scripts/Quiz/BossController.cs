@@ -27,8 +27,8 @@ public class BossController : MonoBehaviour
     [SerializeField] Image aimImg;
     [SerializeField] Sprite[] aimBoardImgArr;
     [SerializeField] Image aimBoardImg;
-    //int[,] hpArr = { { 20, 16, 12, 8 }, { 24, 20, 16, 14 }, { 28, 24, 20, 16 } };
-    int[,] hpArr = { { 4, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 } }; //test hp
+    int[,] hpArr = { { 20, 16, 12, 8 }, { 24, 20, 16, 14 }, { 28, 24, 20, 16 } };
+    //int[,] hpArr = { { 1, 4, 4, 4 }, { 4, 4, 4, 4 }, { 4, 4, 4, 4 } }; //test hp
     int maxHp;
     public int hp;
     bool isFirstTime = true;

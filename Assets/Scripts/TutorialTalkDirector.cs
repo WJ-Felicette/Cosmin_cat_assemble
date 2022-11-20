@@ -214,7 +214,7 @@ public class TutorialTalkDirector : MonoBehaviour
     public void TStep3()
     {
         this.limitTalkCnt = 4;
-        this.bossScript[0] = "WJ-002";
+        this.bossScript[0] = "이번 훈련\n안내를 맡게된\nWJ-002입니다";
         this.bossScript[1] = "통조림\n회수작전을 위한\n훈련 시작";
         this.isSelectTime = true;
         this.bossScript[2] = "훈련 난이도를\n설정합니다"; //보류

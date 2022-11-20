@@ -63,13 +63,17 @@ public class DragCamera : MonoBehaviour
         {
             if (!IsPointerOverUIObject(Input.GetTouch(0).position))
             {
-                Difference = (Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position)) - Camera.main.transform.position;
-
-                if (drag == false)
+                if (!IsPointerOverUIObject(Input.GetTouch(0).position) && Input.GetTouch(0).phase == TouchPhase.Moved)
                 {
-                    drag = true;
-                    Origin = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    Difference = (Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position)) - Camera.main.transform.position;
+
+                    if (drag == false)
+                    {
+                        drag = true;
+                        Origin = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
+                    }
                 }
+
             }
         }
         else

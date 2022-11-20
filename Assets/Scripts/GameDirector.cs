@@ -4,9 +4,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using MoreMountains.Feedbacks;
 
 public class GameDirector : MonoBehaviour
 {
+
+    [Header("About Sound")]
+    [SerializeField] MMFeedbacks[] Sound;
     //----------------About Tutorial---------------
     public bool isTutorial = true;
     public int tutorialStep;
@@ -22,6 +26,7 @@ public class GameDirector : MonoBehaviour
     //---------------------------------------------
     public int catID;
     public int stageLevel = 0; //0 and 1
+    public int totalStageLevel = 0;
     public int mod; // 0:GameOver, 1:NomalMod, 2:QuizMod, 3:QuizTalkingMod, 4:Teleporting, 5:Tutorial
     public float score;
     //public const float baseSpeed = -2.5f;
@@ -43,7 +48,6 @@ public class GameDirector : MonoBehaviour
 
     void Awake()
     {
-        Application.targetFrameRate = 60;
         if (PlayerPrefs.HasKey("ID") && PlayerPrefs.HasKey("Auth"))
         {
             this.isTutorial = false;
@@ -67,6 +71,8 @@ public class GameDirector : MonoBehaviour
     void Start()
     {
         this.Init();
+        Sound[0]?.PlayFeedbacks();
+
     }
     void Init()
     {
@@ -152,7 +158,11 @@ public class GameDirector : MonoBehaviour
     }
     public void SetStage(int _level)
     {
+        int __level = _level - 2 == -1 ? 3 : _level - 2;
+        //Debug.Log(__level);
+        this.totalStageLevel++;
         _level = _level > 3 ? 1 : _level;
+        //Debug.Log(_level);
         Debug.Log("Level: " + _level);
         this.quizModCycle = this.quizModCycleArr[_level];
 

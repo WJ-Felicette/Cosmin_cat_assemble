@@ -10,6 +10,8 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] MMFeedbacks[] Sound;
+    //----------------About Tutorial---------------
     GameDirector GameDirector;
     QuizDirector QuizDirector;
     public BoosterGauge BoosterGauge;
@@ -20,7 +22,7 @@ public class PlayerController : MonoBehaviour
     float boostTimer; //?��?�� �??��?�� �??�� ?��간을 기록
     float boostDuration; //�??��?���? ?��?�� ?��간을 ????��
     float boostPlus;
-    float[] boostPlusArr = { 0.3f, 0.4f, 0.5f, 0.6f };
+    float[] boostPlusArr = { 0.6f, 0.75f, 0.9f, 1.1f };
     public int boostLevel = 0; //?��?��?���? �? �? �??��?���? ?��?��?��?���? ????��
     public float defaultY = -3.5f;
     Vector3 destination; //고양?���? ?��?��?�� ?��치�?? ????��
@@ -149,6 +151,7 @@ public class PlayerController : MonoBehaviour
                         }
                         if (this.GameDirector.mod != 2 || this.state == 0)
                         {
+                            Sound[0]?.PlayFeedbacks();
                             this.boostTimer = 0.0f;
                             this.boostDuration += this.boostPlus;
                             this.state = 1;
@@ -202,7 +205,7 @@ public class PlayerController : MonoBehaviour
         {
             if (this.hp > 0 && this.GameDirector.mod == 1 && this.state != 4)
             {
-                hp -= 2 * Time.deltaTime; //100 -> 1초에 2?�� 깎임.
+                hp -= Time.deltaTime * 2f; //100 -> 1초에 2?�� 깎임.
             }
             else if (this.hp < 0)
             {
@@ -215,7 +218,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator StopBoosting()
     {
         this.boostLevel = 0;
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(0.3f);
 
         DOTween.To(() => this.vcam.m_Lens.OrthographicSize, s => this.vcam.m_Lens.OrthographicSize = s, 5.0f, 0.4f).SetEase(Ease.OutExpo);
         this.transform.DOMoveY(this.defaultY, 0.3f).SetEase(Ease.Linear);
@@ -233,6 +236,7 @@ public class PlayerController : MonoBehaviour
         //캔을 만날 ?��
         if (go.tag == "Can")
         {
+            Sound[2]?.PlayFeedbacks();
             //Destroy(go);
             this.canNumber++;
             CanSocreUI.text = string.Format("{0:#,0}", this.canNumber);
@@ -240,13 +244,16 @@ public class PlayerController : MonoBehaviour
         }
         else if (go.tag == "Item")
         {
+
             //Debug.Log(objController.type);
             if (objController.type == 0)
             {
+                Sound[5]?.PlayFeedbacks();
                 this.hp = this.hp + 15 > 100 ? 100 : this.hp + 15;
             }
             else if (objController.type != 0)
             {
+                Sound[4]?.PlayFeedbacks();
                 this.itemNumber++;
             }
             objController.KillByCat();
@@ -259,6 +266,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 7 && this.GameDirector.boostCnt == 3 && this.GameDirector.boostBreakCnt < 3)
                 {
+                    Sound[3]?.PlayFeedbacks();
                     GameDirector.boostBreakCnt++;
                     GameDirector.TutorialText.text = "부스터로 장애물 파괴\n" + GameDirector.boostBreakCnt + " / 3";
                     //Debug.Log("swingbyCnt: " + GameDirector.swingbyCnt);
@@ -271,7 +279,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!GameDirector.isTutorial)
                 {
-                    this.hp -= 5.0f;
+                    this.hp -= 30.0f;
                 }
                 StartCoroutine(SetInvincible());
                 this.SpriteRenderer.transform.DOShakePosition(0.4f, new Vector3(0.1f, 0.1f, 0), 20);
@@ -320,6 +328,7 @@ public class PlayerController : MonoBehaviour
     }
     public void Swingby()
     {
+        Sound[1]?.PlayFeedbacks();
         // Debug.Log("isTutorial: " + this.GameDirector.isTutorial);
         // Debug.Log("tutorialStep: " + this.GameDirector.tutorialStep);
         if (this.GameDirector.isTutorial && this.GameDirector.tutorialStep == 5 && this.GameDirector.swingbyCnt < 5)

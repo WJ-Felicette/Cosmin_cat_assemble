@@ -178,7 +178,7 @@ public class ObjectBundleController : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < this.height; i++)
+        for (int i = 0; i < this.height + GameDirector.totalStageLevel * 4; i++)
         {
             int _y = Random.Range(0, this.height);
             int _x = Random.Range(0, 5);

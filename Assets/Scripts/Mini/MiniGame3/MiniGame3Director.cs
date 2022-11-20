@@ -13,6 +13,7 @@ public class MiniGame3Director : MonoBehaviour
     [SerializeField] WJ_Sample_Mini WJ_Sample_Mini;
     public int state = 0; //0:sleep, 1:init, 2:playing, 3:Setting
     public int round = 0;
+    int maxRound = 3;
     public int answerId = 6;
     Vector3 defaultHeadPos;
     float quizTimeLimite;
@@ -118,7 +119,7 @@ public class MiniGame3Director : MonoBehaviour
                 }
 
                 string _s = "";
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < this.maxRound; i++)
                 {
                     if (this.resultArr[i] == 1)
                     {
@@ -145,13 +146,14 @@ public class MiniGame3Director : MonoBehaviour
                 CorrectTXT.text = "";
                 this.round++;
 
-                if (this.round < 4)
+                if (this.round < this.maxRound)
                 {
                     StartCoroutine(this.NextQuiz());
                 }
                 else
                 {
                     Debug.Log("Mini Game Done! :<");
+                    WJ_Sample_Mini.SaveData();
                     GameOverWindowPopUp();
                     //StartCoroutine(this.EndQuizMod());
                 }
@@ -159,7 +161,7 @@ public class MiniGame3Director : MonoBehaviour
     }
     IEnumerator NextQuiz()
     {
-        Debug.Log("NextQuiz");
+        // Debug.Log("NextQuiz");
         this.InitRat();
         yield return new WaitForSeconds(1.5f);
         QuizTXT.text = this.nextText;
@@ -230,7 +232,7 @@ public class MiniGame3Director : MonoBehaviour
             .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
-                GameOver_TEXT[0].text = "4문제 중 " + this.score + "문제 정답!";
+                GameOver_TEXT[0].text = "3문제 중 " + this.score + "문제 정답!";
 
                 this.canScore = this.score * 30;
                 int __canScore = 0;
@@ -239,7 +241,7 @@ public class MiniGame3Director : MonoBehaviour
                             GameOver_TEXT[1].text = string.Format("{0:#,0}", __canScore) + "개";
                         }).SetUpdate(true);
 
-                this.chur = this.score == 4 ? 1 : 0;
+                this.chur = this.score == 3 ? 1 : 0;
                 int __dia = 0;
                 DOTween.To(() => __dia, x => __dia = x, this.chur, 0.2f).OnUpdate(() =>
                         {

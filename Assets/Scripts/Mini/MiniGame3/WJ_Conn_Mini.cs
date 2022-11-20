@@ -238,7 +238,7 @@ public class WJ_Conn_Mini : MonoBehaviour
 
         if (PlayerPrefs.HasKey("Auth") == true)
         {
-            Debug.Log("User data is loaded!");
+            //Debug.Log("User data is loaded!");
             strMBR_ID = PlayerPrefs.GetString("ID");
             strAuthorization = PlayerPrefs.GetString("Auth");
         }
@@ -464,6 +464,7 @@ public class WJ_Conn_Mini : MonoBehaviour
     // 게임 학습 문항 요청
     protected IEnumerator GetLearning()
     {
+        nState_Request = 0;
         Request_Learning request = new Request_Learning();
         request.gameCd = strGameCD;
         request.mbrId = strMBR_ID;

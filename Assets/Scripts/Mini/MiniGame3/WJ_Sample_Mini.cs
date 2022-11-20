@@ -30,6 +30,7 @@ public class WJ_Sample_Mini : MonoBehaviour
 
     protected WJ_Conn_Mini.Learning_Data cLearning;
     protected int nLearning_Idx;     // Learning 문제 인덱스
+    protected string[] txAnsr = new string[8];
     protected string[] strQstCransr = new string[8];        // 사용자가 보기에서 선택한 답 내용
     protected long[] nQstDelayTime = new long[8];           // 풀이에 소요된 시간
 
@@ -60,8 +61,7 @@ public class WJ_Sample_Mini : MonoBehaviour
 
         //goPopup_Level_Choice.active = false;
 
-        cLearning = null;
-        nLearning_Idx = 0;
+        this.LoadData();
 
 
         // txAnsr = new TEXDraw[btAnsr.Length];
@@ -125,7 +125,7 @@ public class WJ_Sample_Mini : MonoBehaviour
             case STATE.LEARNING:
                 {
                     // 선택한 정답을 저장함
-                    //strQstCransr[nLearning_Idx - 1] = txAnsr[_nIndex].text;
+                    strQstCransr[nLearning_Idx - 1] = txAnsr[_nIndex];
                     nQstDelayTime[nLearning_Idx - 1] = 5000;        // 임시값
                     // 다음문제 출제
                     DoLearning();
@@ -172,10 +172,18 @@ public class WJ_Sample_Mini : MonoBehaviour
         }
         else
         {
-            if (nLearning_Idx >= scWJ_Conn.cLearning_Info.data.qsts.Count)
+            if (nLearning_Idx >= 8)
             {
                 scWJ_Conn.OnLearningResult(cLearning, strQstCransr, nQstDelayTime);      // 학습 결과 처리
                 cLearning = null;
+
+                //-----------다시 루프--------
+                PlayerPrefs.SetInt("_isIncomplete", 0);
+                nLearning_Idx = 0;
+
+                scWJ_Conn.OnRequest_Learning();
+
+                bRequest = true;
 
                 SetActive_Question(false);
                 return;
@@ -193,11 +201,54 @@ public class WJ_Sample_Mini : MonoBehaviour
     }
 
 
+    void LoadData()
+    {
+        if (PlayerPrefs.GetInt("_isIncomplete", 0) == 1)
+        {
+            this.nLearning_Idx = PlayerPrefs.GetInt("_nLearning_Idx", nLearning_Idx);
+            this.cLearning = JsonUtility.FromJson<WJ_Conn_Mini.Learning_Data>(PlayerPrefs.GetString("_cLearning"));
+            for (int i = 0; i < 8; i++)
+            {
+                strQstCransr[i] = PlayerPrefs.GetString("_strQstCransr" + i);
+            }
+            for (int i = 0; i < 8; i++)
+            {
+                nQstDelayTime[i] = PlayerPrefs.GetInt("_nQstDelayTime" + i);
+            }
+            Debug.Log(nLearning_Idx + ": nLearning_Idx");
+        }
+        else
+        {
+            cLearning = null;
+            nLearning_Idx = 0;
+        }
+    }
+
+    public void SaveData()
+    {
+        int _nLearning_Idx = nLearning_Idx;
+        string _cLearning = JsonUtility.ToJson(cLearning);
+
+        PlayerPrefs.SetInt("_isIncomplete", 1);
+        PlayerPrefs.SetInt("_nLearning_Idx", nLearning_Idx - 1);
+        PlayerPrefs.SetString("_cLearning", _cLearning);
+        for (int i = 0; i < 8; i++)
+        {
+            PlayerPrefs.SetString("_strQstCransr" + i, strQstCransr[i]);
+        }
+        for (int i = 0; i < 8; i++)
+        {
+            PlayerPrefs.SetInt("_nQstDelayTime" + i, (int)nQstDelayTime[i]);
+        }
+        PlayerPrefs.Save();
+    }
+
 
 
 
     protected void MakeQuestion(string _qstCn, string _qstCransr, string _qstWransr, string _qstCd)
     {
+        Debug.Log(this.nLearning_Idx + ": make nLearning_Idx!!!");
         char[] SEP = { ',' };
         string[] tmWrAnswer;
         //TEXDraw.text = scWJ_Conn.GetLatexCode(_qstCn); // 문제 출력
@@ -260,6 +311,7 @@ public class WJ_Sample_Mini : MonoBehaviour
                 //QuizDirector.answerId = i; //정답 저장하는 부분
                 MiniGame3Director.answerId = i;
                 //Debug.Log(btAnsr[i]);
+                txAnsr[i] = strAnswer;
                 btAnsr[i].gameObject.GetComponent<RatController>().isActive = true;
                 btAnsr[i].gameObject.GetComponent<RatController>().id = i;
                 btAnsr[i].gameObject.GetComponent<RatController>().nextText = strAnswer;
@@ -268,6 +320,7 @@ public class WJ_Sample_Mini : MonoBehaviour
             }
             else
             {
+                txAnsr[i] = tmWrAnswer[q];
                 btAnsr[i].gameObject.GetComponent<RatController>().isActive = true;
                 btAnsr[i].gameObject.GetComponent<RatController>().id = i;
                 btAnsr[i].gameObject.GetComponent<RatController>().nextText = tmWrAnswer[q];

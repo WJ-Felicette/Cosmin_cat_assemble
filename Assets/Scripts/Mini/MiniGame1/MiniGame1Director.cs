@@ -13,11 +13,12 @@ public class MiniGame1Director : MonoBehaviour
     [SerializeField] WJ_Sample_Mini_1 WJ_Sample_Mini;
     public int state = 0; //0:sleep, 1:init, 2:playing, 3:Setting
     public int round = 0;
+    int maxRound = 3;
     public int answerId = 6;
     Vector3 defaultHeadPos;
     float quizTimeLimite;
     float quizTimer = 0;
-    int[] resultArr = { 0, 0, 0, 0 };
+    int[] resultArr = { 0, 0, 0, 0, 0, 0, 0, 0 };
     int score = 0;
     int canScore = 0;
     int chur = 0;
@@ -75,7 +76,7 @@ public class MiniGame1Director : MonoBehaviour
         this.Handle.GetComponent<Button>().interactable = false;
         for (int i = 0; i < 5; i++)
         {
-            int _d = 130;
+            int _d = 140;
             this.ATextGOArr[i].GetComponent<RectTransform>().localPosition = new Vector3(_d * Mathf.Cos((2 * Mathf.PI / 5) * i + Mathf.PI / 2), _d * Mathf.Sin((2 * Mathf.PI / 5) * i + Mathf.PI / 2), 0);
         }
         WJ_Sample_Mini.OnClick_MakeQuestion();
@@ -102,7 +103,7 @@ public class MiniGame1Director : MonoBehaviour
         this.Dial.GetComponent<Button>().interactable = false;
         int _side = Random.Range(0, 2);
         int _rotateSide = _side == 0 ? -1 : 1;
-        this.dailID = this.dailID + 1 > 4 ? 0 : this.dailID + 1;
+        this.dailID = this.dailID - 1 > -1 ? this.dailID - 1 : 4;
         DialoundFeedback?.PlayFeedbacks();
         DOTween.Sequence()
             .Append(handArr[_side].transform.DOMove(this.DialTarget.position, 0.1f).SetEase(Ease.InCubic))
@@ -150,8 +151,9 @@ public class MiniGame1Director : MonoBehaviour
                 }
 
                 string _s = "";
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < this.maxRound; i++)
                 {
+                    Debug.Log(i);
                     if (this.resultArr[i] == 1)
                     {
                         _s += "0  ";
@@ -178,13 +180,14 @@ public class MiniGame1Director : MonoBehaviour
                 CorrectTXT.text = "";
                 this.round++;
 
-                if (this.round < 4)
+                if (this.round < this.maxRound)
                 {
                     StartCoroutine(this.NextQuiz());
                 }
                 else
                 {
                     Debug.Log("Mini Game Done! :<");
+                    WJ_Sample_Mini.SaveData();
                     GameOverWindowPopUp();
                     //StartCoroutine(this.EndQuizMod());
                 }
@@ -258,7 +261,7 @@ public class MiniGame1Director : MonoBehaviour
             .AppendInterval(0.5f)
             .AppendCallback(() =>
             {
-                GameOver_TEXT[0].text = "4문제 중 " + this.score + "문제 정답!";
+                GameOver_TEXT[0].text = "3문제 중 " + this.score + "문제 정답!";
 
                 this.canScore = this.score * 30;
                 int __canScore = 0;
@@ -267,7 +270,7 @@ public class MiniGame1Director : MonoBehaviour
                             GameOver_TEXT[1].text = string.Format("{0:#,0}", __canScore) + "개";
                         }).SetUpdate(true);
 
-                this.chur = this.score == 4 ? 1 : 0;
+                this.chur = this.score == 3 ? 1 : 0;
                 int __dia = 0;
                 DOTween.To(() => __dia, x => __dia = x, this.chur, 0.2f).OnUpdate(() =>
                         {

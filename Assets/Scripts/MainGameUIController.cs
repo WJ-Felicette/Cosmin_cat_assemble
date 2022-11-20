@@ -141,13 +141,13 @@ public class MainGameUIController : MonoBehaviour
                 int __canScore = 0;
                 DOTween.To(() => __canScore, x => __canScore = x, _canScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "ê°?";
+                            GameOver_TEXT[2].text = string.Format("{0:#,0}", __canScore) + "°³";
                         }).SetUpdate(true);
 
                 int __collectibleScore = 0;
                 DOTween.To(() => __collectibleScore, x => __collectibleScore = x, _collectibleScore, 0.2f).OnUpdate(() =>
                         {
-                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "ê°?";
+                            GameOver_TEXT[3].text = string.Format("{0:#,0}", __collectibleScore) + "°³";
                         }).SetUpdate(true);
             })
             .SetUpdate(true);

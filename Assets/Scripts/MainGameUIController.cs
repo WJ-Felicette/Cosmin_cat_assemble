@@ -166,6 +166,9 @@ public class MainGameUIController : MonoBehaviour
         {
             PlayerPrefs.SetInt("highScore", _myScore);
         }
+
+        PlayerPrefs.SetInt("goalValue" + 0, PlayerPrefs.GetInt("goalValue" + 0, 0) + _myScore);
+        PlayerPrefs.SetInt("goalValue" + 3, PlayerPrefs.GetInt("goalValue" + 3, 0) + _canScore);
         PlayerPrefs.Save();
         //.SetUpdate(true);
         //GameOver_TEXT[1].text = string.Format("{0:#,0}", PlayerPrefs.GetInt("highScore", 0));

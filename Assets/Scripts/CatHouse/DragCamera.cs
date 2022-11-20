@@ -19,7 +19,7 @@ public class DragCamera : MonoBehaviour
     float height;
     float width;
     float endX = 20.0f;
-    
+
 
     private void Start()
     {
@@ -59,12 +59,13 @@ public class DragCamera : MonoBehaviour
     private void LateUpdate()
     {
 
-        if (Input.touchCount > 0){
-            if(!IsPointerOverUIObject(Input.GetTouch(0).position))
-            {  
+        if (Input.touchCount > 0)
+        {
+            if (!IsPointerOverUIObject(Input.GetTouch(0).position))
+            {
                 Difference = (Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position)) - Camera.main.transform.position;
 
-                if(drag == false)
+                if (drag == false)
                 {
                     drag = true;
                     Origin = Camera.main.ScreenToWorldPoint(Input.GetTouch(0).position);
@@ -83,17 +84,18 @@ public class DragCamera : MonoBehaviour
 
         if (Input.GetMouseButton(1))
             Camera.main.transform.position = ResetCamera;
+        FixedUpdate();
 
     }
 
-     void FixedUpdate()
+    void FixedUpdate()
     {
         LimitCameraArea();
     }
 
     void LimitCameraArea()
     {
-       
+
         float lx = mapSize.x - width;
         float clampX = Mathf.Clamp(transform.position.x, -lx + center.x, lx + center.x);
 
@@ -106,17 +108,17 @@ public class DragCamera : MonoBehaviour
 
     public bool IsPointerOverUIObject(Vector2 touchPos)
     {
-        PointerEventData eventDataCurrentPosition 
+        PointerEventData eventDataCurrentPosition
             = new PointerEventData(EventSystem.current);
-        
+
         eventDataCurrentPosition.position = touchPos;
-        
+
         List<RaycastResult> results = new List<RaycastResult>();
-            
-        
+
+
         EventSystem.current
         .RaycastAll(eventDataCurrentPosition, results);
-            
-    return results.Count > 0;
-    } 
+
+        return results.Count > 0;
+    }
 }

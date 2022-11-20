@@ -143,6 +143,8 @@ public class BossController : MonoBehaviour
     }
     public void Damaged(int _prizeValue)
     {
+        PlayerPrefs.SetInt("goalValue" + 1, PlayerPrefs.GetInt("goalValue" + 1, 0) + 1);
+        PlayerPrefs.Save();
         this.hp = this.hp - 1 > 0 ? this.hp - 1 : 0;
         QuizTXT.text = "";
         this.SpriteRenderer.transform.DOShakeRotation(0.4f, 30.0f, 15).SetDelay(0.3f).OnComplete(() =>
@@ -168,6 +170,8 @@ public class BossController : MonoBehaviour
     }
     public void Die()
     {
+        PlayerPrefs.SetInt("goalValue" + 2, PlayerPrefs.GetInt("goalValue" + 3, 0) + 1);
+        PlayerPrefs.Save();
         isFirstTime = true;
         hpBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(180f, 0.6f).SetDelay(0.6f);
         scoreBar.gameObject.GetComponent<RectTransform>().DOAnchorPosY(-150f, 0.6f).SetDelay(0.6f);

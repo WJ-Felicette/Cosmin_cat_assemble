@@ -39,7 +39,7 @@ public class GameDirector : MonoBehaviour
     [SerializeField] MainGameUIController MainGameUIController;
 
     [SerializeField] TextMeshProUGUI stageTXT;
-    string[] stageNameArr = { "", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주쥐 본부" };
+    string[] stageNameArr = { "", "안드로메다은하\n중심부", "우주\n쓰레기 처리장", "우주 해적쥐\n본부" };
 
     void Awake()
     {

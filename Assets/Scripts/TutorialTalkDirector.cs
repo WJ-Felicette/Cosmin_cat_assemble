@@ -14,7 +14,7 @@ public class TutorialTalkDirector : MonoBehaviour
     string[] bossScript = new string[10];
     string[] playerScript = { "야옹!", "냥냥~!", "냐오옹!!", "그르릉", "냥", "미야옹", "미야우~", "웨엥~!" };
 
-    string[] selectLevelplayerScript = { "숫자", "더하기", "곱하기", "분수" };
+    string[] selectLevelplayerScript = { "숫자냥", "더하기냥", "곱하기냥", "분수냥" };
     bool isSelectTime = false;
 
     //QuizDirector QuizDirector;
@@ -214,7 +214,7 @@ public class TutorialTalkDirector : MonoBehaviour
     public void TStep3()
     {
         this.limitTalkCnt = 4;
-        this.bossScript[0] = "WJ-002\n";
+        this.bossScript[0] = "WJ-002";
         this.bossScript[1] = "통조림\n회수작전을 위한\n훈련 시작";
         this.isSelectTime = true;
         this.bossScript[2] = "훈련 난이도를\n설정합니다"; //보류
